@@ -93,8 +93,8 @@ namespace Thronia
 
                     }
                 }
-                
-  
+
+
                 if (tiles_fish.Count > 0)
                 {
                     int tile_index = random.Next() % tiles_fish.Count;
@@ -102,9 +102,14 @@ namespace Thronia
                     int fish_x = (int)self.getPos_x() + tiles_fish[tile_index].getOffsetX();
                     int fish_y = (int)self.getPos_y() + tiles_fish[tile_index].getOffsetY();
                     int fish_z = (int)self.getPos_z();
+
+                    // this order because we dont want to hide "You can not throw there"
                     throniaMemory.SetStatus(20, "Using fishing rod. Tiles with fishes left: " + tiles_fish.Count.ToString() + ".");
-                    //throniaSender.UseWith(65535, 10, 0, 2580, 0, fish_x, fish_y, fish_z, 490, 0);
-                    FindAndUseItemOnGround(2580, fish_x, fish_y);
+                    if (!FindAndUseItemOnGround(2580, fish_x, fish_y))
+                    {
+                        throniaMemory.SetStatus(20, "Fishing rod not found.");
+                    }
+
                 }
                 else
                 {
@@ -117,7 +122,7 @@ namespace Thronia
         public bool FindItemInInventory(int itemid, ref int slotIndex)
         {
             Inventory inv = throniaMemory.getInventory();
-            for(int i=0; i<Inventory.SLOT_COUNT; i++)
+            for (int i = 0; i < Inventory.SLOT_COUNT; i++)
             {
                 if (inv.getObjects()[i].getObjectId() == itemid)
                 {
@@ -130,22 +135,20 @@ namespace Thronia
 
         public bool FindItemInContainers(int itemId, ref int containerIndex, ref int slotIndex)
         {
-            Equipment eq = throniaMemory.getEquipment();
-            for (int j = 0; j < Equipment.MAX_OPENED_CONTAINERS; j++)
+            Container[] openContainers = throniaMemory.getEquipment().getOpenContainers();
+            foreach (Container c in openContainers)
             {
-                Container c = eq.getContainers()[j];
-                if (c.isOpen())
+                foreach (ObjectData o in c.getItems())
                 {
-                    for (int i = 0; i < c.getItemCount(); i++)
+                    if (o.getObjectId() == itemId)
                     {
-                        if (c.getItems()[i].getObjectId() == itemId)
-                        {
-                            containerIndex = j;
-                            slotIndex = i;
-                            return true;
-                        }
+                        containerIndex = c.getIndex();
+                        slotIndex = o.getSlotIndex();
+                        return true;
                     }
                 }
+
+
             }
             return false;
         }
@@ -157,7 +160,7 @@ namespace Thronia
             int itemId = inv.getObjects()[slot].getObjectId();
             int posZ = throniaMemory.getSelf().getPos_z();
             int dstId = throniaMemory.getMap().getTileAbsolute(posX, posY).getTopItem().getObjectId();
-            int dstStackPos = throniaMemory.getMap().getTileAbsolute(posX, posY).getStackedObjectCount() -1;
+            int dstStackPos = throniaMemory.getMap().getTileAbsolute(posX, posY).getStackedObjectCount() - 1;
             throniaSender.UseEqItemWithOnGround(slot, itemId, posX, posY, posZ, dstId, dstStackPos);
         }
 

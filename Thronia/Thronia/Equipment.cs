@@ -84,7 +84,7 @@ namespace Thronia
                 Array.Copy(data, ObjectData.OBJECT_DATA_SIZE * i, subdata, 0,
                     ObjectData.OBJECT_DATA_SIZE);
 
-                objects[i] = new ObjectData(subdata);
+                objects[i] = new ObjectData(subdata, i);
             }
 
         }
@@ -126,7 +126,7 @@ namespace Thronia
             Byte[] subdata = new Byte[ObjectData.OBJECT_DATA_SIZE];
             Array.Copy(data, CONTAINER_OBJECT_DATA_OFFSET, subdata, 0,
                 ObjectData.OBJECT_DATA_SIZE);
-            container = new ObjectData(subdata);
+            container = new ObjectData(subdata, -1);
             Name = Encoding.ASCII.GetString(data, CONTAINER_NAME_OFFSET, 32);
             itemCount = BitConverter.ToInt32(data, CONTAINER_ITEM_COUNT_OFFSET);
             items = new ObjectData[itemCount];
@@ -135,7 +135,7 @@ namespace Thronia
                 subdata = new Byte[ObjectData.OBJECT_DATA_SIZE];
                 Array.Copy(data, CONTAINER_ITEMS_START + i * ObjectData.OBJECT_DATA_SIZE, subdata, 0,
                     ObjectData.OBJECT_DATA_SIZE);
-                items[i] = new ObjectData(subdata);
+                items[i] = new ObjectData(subdata, i);
             }
         }
 

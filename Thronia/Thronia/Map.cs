@@ -124,20 +124,24 @@ namespace Thronia
         int objectId;
         int data1;
         int data2;
+        int slotIndex;
 
-        public ObjectData(Byte[] data)
+        public ObjectData(Byte[] data, int _slotIndex)
         {
             objectId = BitConverter.ToInt32(data, 0);
             data1 = BitConverter.ToInt32(data, 4);
             data2 = BitConverter.ToInt32(data, 8);
+            slotIndex = _slotIndex;
         }
-        public ObjectData(Int32 _objectId, Int32 _data1, Int32 _data2)
+        public ObjectData(Int32 _objectId, Int32 _data1, Int32 _data2, int _slotIndex)
         {
             objectId = _objectId;
             data1 = _data1;
             data2 = _data2;
+            slotIndex = _slotIndex;
         }
 
+        public int getSlotIndex() { return slotIndex;  }
         public int getObjectId() { return objectId; }
         public int getData1() { return data1; }
         public int getData2() { return data2; }
@@ -168,11 +172,11 @@ namespace Thronia
                 Array.Copy(data, 4 + (ObjectData.OBJECT_DATA_SIZE * i), subdata, 0, 
                     ObjectData.OBJECT_DATA_SIZE);
 
-                objectsData[i] = new ObjectData(subdata);
+                objectsData[i] = new ObjectData(subdata, i);
             }
             for(int i=stackedObjectCount; i<MAP_OBJECTS_MAX_COUNT; i++)
             {
-                objectsData[i] = new ObjectData(0,0,0);
+                objectsData[i] = new ObjectData(0,0,0, i);
             }
         }
 
