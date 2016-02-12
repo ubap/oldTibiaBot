@@ -13,6 +13,7 @@
   <PropertyGroup Label="Globals">
     <ProjectGuid>{DF46DA89-E7A8-4BA5-88F2-2136680ED0E9}</ProjectGuid>
     <RootNamespace>dump_packets_c</RootNamespace>
+    <ProjectName>oldTibiaAPI</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
