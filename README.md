@@ -1,7 +1,7 @@
 # oldTibiaBot
 Used for thronia.org
 
-inject dump_packets_c.dll into Thronia.exe\n
+inject dump_packets_c.dll into Thronia.exe<br \>
 it exports some functions of Thronia via local UDP server on port 8888.
 
 Controller written in C#
