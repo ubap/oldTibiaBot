@@ -13,7 +13,7 @@ namespace Thronia
         ThroniaMemory throniaMemory;
         ThroniaSender throniaSender;
         Thread fishingThread;
-        Thread fullLightThread;
+        
         Thread autoEatFoodThread;
 
         public ThroniaController(ThroniaMemory _throniaMemory, ThroniaSender _throniaSender)
@@ -29,24 +29,16 @@ namespace Thronia
             {
                 fishingThread.Abort();
             }
-            if (fullLightThread != null)
-            {
-                fullLightThread.Abort();
-            }
             if (autoEatFoodThread != null)
             {
                 autoEatFoodThread.Abort();
             }
         }
 
-        public void FullLight()
+        public void setFullLight()
         {
-            while (true)
-            {
-                BattleListEntry self = throniaMemory.getSelf();
-                throniaMemory.setCreatureLight(self, 16, 0xD7);
-                Thread.Sleep(100);
-            }
+            BattleListEntry self = throniaMemory.getSelf();
+            throniaMemory.setCreatureLight(self, 16, 0xD7);
         }
 
         public void startAutoFish()
@@ -64,20 +56,7 @@ namespace Thronia
             }
         }
 
-        public void startFullLight()
-        {
-            fullLightThread = new Thread(new ThreadStart(this.FullLight));
-            fullLightThread.Start();
 
-        }
-
-        public void stopFullLight()
-        {
-            if (fullLightThread != null)
-            {
-                fullLightThread.Abort();
-            }
-        }
 
         public void startAutoEatFood()
         {

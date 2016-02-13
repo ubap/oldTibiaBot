@@ -24,6 +24,7 @@ namespace Thronia
         const int EQUIPMENT_START = 0x005CED60;
         const int MANA_POINTER = 0x44b979;
         const int SELF_ID_PTR_ADDR = 0x0044d6d1;
+        const int IS_ONLINE = 0x0071C588;
 
         [DllImport("kernel32.dll")]
         static extern IntPtr OpenProcess(int dwDesiredAccess, bool bInheritHandle, int dwProcessId);
@@ -36,16 +37,22 @@ namespace Thronia
         static extern bool WriteProcessMemory(int hProcess,
           int lpBaseAddress, byte[] lpBuffer, int dwSize, ref int lpNumberOfBytesWritten);
 
-        public ThroniaMemory()
+        public ThroniaMemory(int pId)
         {
+            //Inject(pId);
+            processHandle = OpenProcess(PROCESS_ALL_ACCESS, false, pId);
         }
 
-        public void AttachToProcess()
+        
+
+        public String getCharacterName()
         {
-            Process[] localByName = Process.GetProcessesByName("Thronia");
-            processHandle = OpenProcess(PROCESS_ALL_ACCESS, false, localByName[0].Id);
-
-
+            int isOnline = ReadInt32(IS_ONLINE);
+            if (isOnline == 8)
+            {
+                return getSelf().getName();
+            }
+            return "Not logged in.";
         }
 
 

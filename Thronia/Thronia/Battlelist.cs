@@ -80,7 +80,7 @@ namespace Thronia
         {
             index = _index;
             Id = BitConverter.ToUInt32(data, 0);
-            Name = Encoding.ASCII.GetString(data, NAME_OFFSET, 32);
+            Name = Encoding.ASCII.GetString(data, NAME_OFFSET, 32).TrimEnd('\0');
             Pos_x = BitConverter.ToInt32(data, POS_X_OFFSET);
             Pos_y = BitConverter.ToInt32(data, POS_Y_OFFSET);
             Pos_z = BitConverter.ToInt32(data, POS_Z_OFFSET);

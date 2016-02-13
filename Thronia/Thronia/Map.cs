@@ -155,8 +155,8 @@ namespace Thronia
         Map map;
         int stackedObjectCount;
         ObjectData[] objectsData;
-        int padding1;
-        int padding2;
+        //int padding1;
+        //int padding2;
 
         public Tile(Byte[] data, int _index, Map _map)
         {
