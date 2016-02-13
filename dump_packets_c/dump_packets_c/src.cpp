@@ -1,11 +1,7 @@
 #include <Windows.h>
-//#include <winsock2.h>
-#include <vector>
-
-#pragma comment (lib, "Ws2_32.lib")
+#include <cstdio>
 
 #define BUFLEN 512  //Max length of buffer
-#define PORT 8888   //The port on which to listen for incoming data
 
 /*
 say:      mode=1
@@ -102,7 +98,10 @@ void ProcessCommand(char *cmd)
   char *delimiters = "(,)";
   char* context = NULL;
 
-  tok = strtok_s(cmd, "delimiters", &context);
+  tok = strtok_s(cmd, delimiters, &context);
+  int cmdLen = strlen(tok);
+  for (int i = 0; i < cmdLen; i++)
+    tok[i] = tolower(tok[i]);
   if (strcmp(tok, "say") == 0)
   {
     tok = strtok_s(NULL, delimiters, &context);
@@ -203,74 +202,62 @@ void ProcessCommand(char *cmd)
     return;
 }
 
-void InitSocket()
+/*
+https://github.com/avidinsight/win32-named-pipes-example
+https://msdn.microsoft.com/en-us/library/windows/desktop/aa365150(v=vs.85).aspx
+*/
+void PipeControl()
 {
-  SOCKET s;
-  struct sockaddr_in server, si_other;
-  int slen, recv_len;
-  char buf[BUFLEN];
-  WSADATA wsa;
+  DWORD pId = GetCurrentProcessId();
+  char pipeName[256];
+  sprintf_s(pipeName, "\\\\.\\pipe\\thronia%d", pId);
 
-  slen = sizeof(si_other);
+start_listening:
+  // Create a pipe to send data
+  HANDLE pipe = CreateNamedPipe(
+    pipeName, // name of the pipe
+    PIPE_ACCESS_INBOUND, // 1-way pipe -- raed only
+    PIPE_TYPE_MESSAGE, // send data as a byte stream
+    1, // only allow 1 instance of this pipe
+    0, // no outbound buffer
+    0, // no inbound buffer
+    0, // use default wait time
+    NULL // use default security attributes
+    );
 
-  if (WSAStartup(MAKEWORD(2, 2), &wsa) != 0)
-  {
-    MessageBoxA(NULL, "WSAStartup failed.", "Error injecting DLL", MB_OK);
-    return;
+  if (pipe == NULL || pipe == INVALID_HANDLE_VALUE) {
+    goto start_listening;
   }
 
-  //Create a socket
-  if ((s = socket(AF_INET, SOCK_DGRAM, 0)) == INVALID_SOCKET)
-  {
-    MessageBoxA(NULL, "Could not create socket", "Error injecting DLL", MB_OK);
-    return;
+  // This call blocks until a client process connects to the pipe
+  BOOL result = ConnectNamedPipe(pipe, NULL);
+  if (!result) {
+    CloseHandle(pipe); // close the pipe
+    goto start_listening;
   }
 
-  //Prepare the sockaddr_in structure
-  server.sin_family = AF_INET;
-  server.sin_addr.s_addr = INADDR_ANY;
-  server.sin_port = htons(PORT);
-
-  //Bind
-  if (bind(s, (struct sockaddr *)&server, sizeof(server)) == SOCKET_ERROR)
-  {
-    MessageBoxA(NULL, "Bind failed with error code", "Error injecting DLL", MB_OK);
-    return;
-  }
-
-  MessageBoxA(NULL, "In like Flynn!", "Success injecting DLL", MB_OK);
-  //keep listening for data
+  char buffer[BUFLEN];
   while (1)
   {
+    // The read operation will block until there is data to read
+    DWORD numBytesRead = 0;
+    result = ReadFile(
+      pipe,
+      buffer, // the data from the pipe will be put here
+      BUFLEN * sizeof(char), // number of bytes allocated
+      &numBytesRead, // this will store number of bytes actually read
+      NULL // not using overlapped IO
+      );
 
-    //clear the buffer by filling null, it might have previously received data
-    memset(buf, '\0', BUFLEN);
-
-    //try to receive some data, this is a blocking call
-    if ((recv_len = recvfrom(s, buf, BUFLEN, 0, (struct sockaddr *) &si_other, &slen)) == SOCKET_ERROR)
-    {
-      //printf("recvfrom() failed with error code : %d", WSAGetLastError());
-      return;
+    if (result) {
+      buffer[numBytesRead] = 0;
+      ProcessCommand(buffer);
     }
-
-    ProcessCommand(buf);
- 
-  //print details of the client/peer and the data received
-  //printf("Received packet from %s:%d\n", inet_ntoa(si_other.sin_addr), ntohs(si_other.sin_port));
-  //printf("Data: %s\n", buf);
-
-  //now reply the client with the same data
-  //if (sendto(s, buf, recv_len, 0, (struct sockaddr*) &si_other, slen) == SOCKET_ERROR)
-  //{
-  //  //printf("sendto() failed with error code : %d", WSAGetLastError());
-  //  return;
-  // }
-}
-
-closesocket(s);
-WSACleanup();
-
-return;
+    else {
+      CloseHandle(pipe);
+      goto start_listening;
+    }
+  }
 }
 
 BOOL APIENTRY DllMain(HMODULE hModule, DWORD ul_reason_for_call, LPVOID lpReserved)
@@ -279,7 +266,7 @@ BOOL APIENTRY DllMain(HMODULE hModule, DWORD ul_reason_for_call, LPVOID lpReserv
   {
   case DLL_PROCESS_ATTACH:
     DisableThreadLibraryCalls(hModule);
-    CreateThread(NULL, 0, (unsigned long(__stdcall*)(void*))InitSocket, NULL, 0, NULL);
+    CreateThread(NULL, 0, (unsigned long(__stdcall*)(void*))PipeControl, NULL, 0, NULL);
   }
   return TRUE;
 }

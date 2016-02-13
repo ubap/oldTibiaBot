@@ -44,13 +44,29 @@ namespace Thronia
 
         private void button1_Click(object sender, EventArgs e)
         {
-            this.Hide();
             int selected = comboBox1.SelectedIndex;
             int pId = descriptors[selected].getpId();
-            ThroniaInjector.Inject(pId);
-            ThroniaBot bot = new ThroniaBot(pId);
-            Form mainWindow = new Form1(bot);
-            mainWindow.Show();
+
+            this.Hide();
+            try
+            {
+                ThroniaInjector.Inject(pId);
+                ThroniaBot bot = new ThroniaBot(pId);
+                Form mainWindow = new Form1(bot);
+                MessageBox.Show("In like Flynn", "Success:)");
+                mainWindow.Show();
+            }
+            catch(Exception exception)
+            {
+                MessageBox.Show("Could not inject.\n" + exception.Message, "Error.");
+                // find out what is blocking app from exiting on its own?
+                Application.Exit();
+            }
+            
+
         }
+
+        private void ClientSelector_FormClosed(object sender, FormClosedEventArgs e)
+        {}
     }
 }

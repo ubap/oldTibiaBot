@@ -61,31 +61,18 @@ namespace Thronia
 
         private void checkBox2_CheckedChanged(object sender, EventArgs e)
         {
-            //if (checkBox2.Checked == true)
-            //{
-            //    throniaController.startAutoFish();
-            //}
-            //else
-            //{
-            //    throniaController.stopAutoFish();
-            //}
+            throniaBot.Fish = checkBox2.Checked;
         }
 
         private void Form1_FormClosed(object sender, FormClosedEventArgs e)
         {
-            //throniaController.stopAll();
+            // maybe minimise to tray??
+            Application.Exit();
         }
 
         private void checkBox3_CheckedChanged(object sender, EventArgs e)
         {
-            //if (checkBox3.Checked == true)
-            //{
-            //    throniaController.startAutoEatFood();
-            //}
-            //else
-            //{
-            //    throniaController.stopAutoEatFood();
-            //}
+            throniaBot.EatFood = true;
         }
 
         private void Form1_Load(object sender, EventArgs e)

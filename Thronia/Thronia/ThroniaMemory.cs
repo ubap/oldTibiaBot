@@ -44,11 +44,23 @@ namespace Thronia
         }
 
         
-
-        public String getCharacterName()
+        public bool isOnline()
         {
             int isOnline = ReadInt32(IS_ONLINE);
             if (isOnline == 8)
+            {
+                return true;
+            }
+            else if (isOnline == 0)
+            {
+                return false;
+            }
+            throw new Exception("isOnline flag bad Value");
+        }
+
+        public String getCharacterName()
+        {
+            if (isOnline())
             {
                 return getSelf().getName();
             }

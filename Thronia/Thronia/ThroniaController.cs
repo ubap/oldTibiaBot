@@ -12,9 +12,8 @@ namespace Thronia
     {
         ThroniaMemory throniaMemory;
         ThroniaSender throniaSender;
-        Thread fishingThread;
-        
-        Thread autoEatFoodThread;
+ 
+
 
         public ThroniaController(ThroniaMemory _throniaMemory, ThroniaSender _throniaSender)
         {
@@ -22,110 +21,54 @@ namespace Thronia
             throniaSender = _throniaSender;
         }
 
-        // abort all threads here
-        public void stopAll()
-        {
-            if (fishingThread != null)
-            {
-                fishingThread.Abort();
-            }
-            if (autoEatFoodThread != null)
-            {
-                autoEatFoodThread.Abort();
-            }
-        }
 
         public void setFullLight()
         {
+            if (!throniaMemory.isOnline())
+                return;
             BattleListEntry self = throniaMemory.getSelf();
             throniaMemory.setCreatureLight(self, 16, 0xD7);
         }
 
-        public void startAutoFish()
-        {
-            fishingThread = new Thread(new ThreadStart(this.AutoFish));
-            fishingThread.Start();
 
-        }
-
-        public void stopAutoFish()
-        {
-            if (fishingThread != null)
-            {
-                fishingThread.Abort();
-            }
-        }
-
-
-
-        public void startAutoEatFood()
-        {
-            autoEatFoodThread = new Thread(new ThreadStart(this.AutoEatFood));
-            autoEatFoodThread.Start();
-
-        }
-
-        public void stopAutoEatFood()
-        {
-            if (autoEatFoodThread != null)
-            {
-                autoEatFoodThread.Abort();
-            }
-        }
-
-        public void AutoFish()
+        public void Fish()
         {
             Random random = new Random();
-            while (true)
+            List<Tile> tiles_fish = new List<Tile>();
+            Map map = throniaMemory.getMap();
+            for (int x = -7; x <= 7; x++)
             {
-                List<Tile> tiles_fish = new List<Tile>();
-                Map map = throniaMemory.getMap();
-                for (int x = -7; x <= 7; x++)
+                for (int y = -5; y <= 5; y++)
                 {
-                    for (int y = -5; y <= 5; y++)
-                    {
-                        Tile tile = map.getTile(x, y);
-                        if (tile.getTopItem().getObjectId() == 490)
-                        {
-                            tiles_fish.Add(tile);
-                        }
-
-                    }
+                    Tile tile = map.getTile(x, y);
+                    if (tile.getTopItem().getObjectId() == 490)
+                        tiles_fish.Add(tile);
                 }
-
-
-                if (tiles_fish.Count > 0)
-                {
-                    int tile_index = random.Next() % tiles_fish.Count;
-                    BattleListEntry self = throniaMemory.getSelf();
-                    int fish_x = (int)self.getPos_x() + tiles_fish[tile_index].getOffsetX();
-                    int fish_y = (int)self.getPos_y() + tiles_fish[tile_index].getOffsetY();
-                    int fish_z = (int)self.getPos_z();
-
-                    // this order because we dont want to hide "You can not throw there"
-                    throniaMemory.SetStatus(20, "Using fishing rod. Tiles with fishes left: " + tiles_fish.Count.ToString() + ".");
-                    if (!FindAndUseItemOnGround(2580, fish_x, fish_y))
-                    {
-                        throniaMemory.SetStatus(20, "Fishing rod not found.");
-                    }
-
-                }
-                else
-                {
-                    throniaMemory.SetStatus(20, "No tiles with fish found.");
-                }
-                Thread.Sleep(1000);
             }
+
+            if (tiles_fish.Count > 0)
+            {
+                int tile_index = random.Next() % tiles_fish.Count;
+                BattleListEntry self = throniaMemory.getSelf();
+                int fish_x = (int)self.getPos_x() + tiles_fish[tile_index].getOffsetX();
+                int fish_y = (int)self.getPos_y() + tiles_fish[tile_index].getOffsetY();
+                int fish_z = (int)self.getPos_z();
+
+                // this order because we dont want to hide "You can not throw there"
+                throniaMemory.SetStatus(20, "Using fishing rod. Tiles with fishes left: " + tiles_fish.Count.ToString() + ".");
+                if (!FindAndUseItemOnGround(2580, fish_x, fish_y))
+                {
+                    throniaMemory.SetStatus(20, "Fishing rod not found.");
+                }
+
+            }
+            else
+            {
+                throniaMemory.SetStatus(20, "No tiles with fish found.");
+            }
+
         }
 
-        public void AutoEatFood()
-        {
-            while (true)
-            {
-                EatFood();
-                Thread.Sleep(15000);
-            }
-        }
 
         public bool EatFood()
         {
@@ -183,7 +126,7 @@ namespace Thronia
             return false;
         }
 
-        
+
         public void UseEqItemOnGround(int slot, int posX, int posY)
         {
             Inventory inv = throniaMemory.getInventory();

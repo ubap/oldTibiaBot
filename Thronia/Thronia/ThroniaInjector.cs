@@ -4,19 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Diagnostics;
-using System.Runtime.InteropServices;
 
 namespace Thronia
 {
     class ThroniaInjector
     {
-        [DllImport("kernel32.dll")]
-        static extern IntPtr OpenProcess(int dwDesiredAccess, bool bInheritHandle, int dwProcessId);
-
-        [DllImport("kernel32.dll")]
-        static extern bool ReadProcessMemory(int hProcess,
-          int lpBaseAddress, byte[] lpBuffer, int dwSize, ref int lpNumberOfBytesRead);
-
         public static void Inject(int pId)
         {
             String LibPath = "C:\\rev\\inject.dll";
@@ -26,7 +18,6 @@ namespace Thronia
             firstProc.EnableRaisingEvents = true;
 
             firstProc.Start();
-
             firstProc.WaitForExit();
             int result = firstProc.ExitCode;
 
