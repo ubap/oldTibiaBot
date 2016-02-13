@@ -12,3 +12,5 @@ Sends commands to thronia on localhost:8888<br \><br \>
 It's a mess!<br \><br \>
 
 Good luck.<br \>
+
+Anyone interested please contact me: ubap.dev@gmail.com
