@@ -55,6 +55,7 @@
     <Compile Include="Map.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ThroniaBot.cs" />
     <Compile Include="ThroniaController.cs" />
     <Compile Include="ThroniaMemory.cs" />
     <Compile Include="ThroniaSender.cs" />

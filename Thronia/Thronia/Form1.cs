@@ -66,10 +66,12 @@ namespace Thronia
             //throniaSender.UseWith(65535, 10, 0, 2580, 0, 32377, 32177, 7, 490, 0);
             //throniaMemory.MapClick(32354, 32153, 11);
             //throniaMemory.getEquipment();
-            int containerIndex = 0;
-            int slotIndex = 0;
+            //int containerIndex = 0;
+           //int slotIndex = 0;
             //throniaController.FindItemInContainers(2580, ref containerIndex, ref slotIndex);
-            throniaController.FindItemInInventory(2580, ref slotIndex);
+            //throniaController.FindItemInInventory(2580, ref slotIndex);
+            throniaController.EatFood();
+            throniaController.BurnMana();
         }
 
         private void checkBox2_CheckedChanged(object sender, EventArgs e)
@@ -87,6 +89,18 @@ namespace Thronia
         private void Form1_FormClosed(object sender, FormClosedEventArgs e)
         {
             throniaController.stopAll();
+        }
+
+        private void checkBox3_CheckedChanged(object sender, EventArgs e)
+        {
+            if (checkBox3.Checked == true)
+            {
+                throniaController.startAutoEatFood();
+            }
+            else
+            {
+                throniaController.stopAutoEatFood();
+            }
         }
     }
 }

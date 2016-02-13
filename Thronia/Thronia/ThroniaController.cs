@@ -14,6 +14,7 @@ namespace Thronia
         ThroniaSender throniaSender;
         Thread fishingThread;
         Thread fullLightThread;
+        Thread autoEatFoodThread;
 
         public ThroniaController(ThroniaMemory _throniaMemory, ThroniaSender _throniaSender)
         {
@@ -31,6 +32,10 @@ namespace Thronia
             if (fullLightThread != null)
             {
                 fullLightThread.Abort();
+            }
+            if (autoEatFoodThread != null)
+            {
+                autoEatFoodThread.Abort();
             }
         }
 
@@ -71,6 +76,21 @@ namespace Thronia
             if (fullLightThread != null)
             {
                 fullLightThread.Abort();
+            }
+        }
+
+        public void startAutoEatFood()
+        {
+            autoEatFoodThread = new Thread(new ThreadStart(this.AutoEatFood));
+            autoEatFoodThread.Start();
+
+        }
+
+        public void stopAutoEatFood()
+        {
+            if (autoEatFoodThread != null)
+            {
+                autoEatFoodThread.Abort();
             }
         }
 
@@ -119,6 +139,37 @@ namespace Thronia
             }
         }
 
+        public void AutoEatFood()
+        {
+            while (true)
+            {
+                EatFood();
+                Thread.Sleep(15000);
+            }
+        }
+
+        public bool EatFood()
+        {
+            // todo: add food list and unpack it
+            // 2667 - fish
+            int containerIndex = 0;
+            int slotIndex = 0;
+            if (FindItemInContainers(2667, ref containerIndex, ref slotIndex))
+            {
+                UseContainerItem(containerIndex, slotIndex);
+                return true;
+            }
+            return false;
+        }
+
+        public void BurnMana()
+        {
+            if (throniaMemory.getMana() > 300)
+            {
+                throniaSender.Say("exura");
+            }
+        }
+
         public bool FindItemInInventory(int itemid, ref int slotIndex)
         {
             Inventory inv = throniaMemory.getInventory();
@@ -153,7 +204,7 @@ namespace Thronia
             return false;
         }
 
-
+        
         public void UseEqItemOnGround(int slot, int posX, int posY)
         {
             Inventory inv = throniaMemory.getInventory();
@@ -162,6 +213,13 @@ namespace Thronia
             int dstId = throniaMemory.getMap().getTileAbsolute(posX, posY).getTopItem().getObjectId();
             int dstStackPos = throniaMemory.getMap().getTileAbsolute(posX, posY).getStackedObjectCount() - 1;
             throniaSender.UseEqItemWithOnGround(slot, itemId, posX, posY, posZ, dstId, dstStackPos);
+        }
+
+        public void UseContainerItem(int containerIndex, int slotIndex)
+        {
+            Container container = throniaMemory.getEquipment().getContainers()[containerIndex];
+            int itemId = container.getItems()[slotIndex].getObjectId();
+            throniaSender.UseItemInContainer(containerIndex, slotIndex, itemId, containerIndex);
         }
 
         public void UseContainerItemOnGround(int containerIndex, int slotIndex, int posX, int posY)

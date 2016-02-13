@@ -22,7 +22,7 @@ namespace Thronia
         const int STATUS_MESSAGE_TIME = 0x0071DBDC;
         const int STATUS_MESSAGE = 0x0071DBE0;
         const int EQUIPMENT_START = 0x005CED60;
-
+        const int MANA_POINTER = 0x44b979;
         const int SELF_ID_PTR_ADDR = 0x0044d6d1;
 
         [DllImport("kernel32.dll")]
@@ -84,9 +84,9 @@ namespace Thronia
             WriteByte(1, address + BattleListEntry.WALK_OFFSET);
         }
 
-        public int getHp()
+        public int getMana()
         {
-            return 0;
+            return ReadInt32(ReadInt32(MANA_POINTER));
         }
 
         public BattleListEntry getSelf()

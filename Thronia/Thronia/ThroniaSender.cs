@@ -14,6 +14,11 @@ namespace Thronia
             SendMessage("say(1," + message + ")");
         }
 
+        public void UseItemInContainer(int containerIndex, int slotIndex, int itemId, int dstContainerIndex)
+        {
+            UseItem(0xFFFF, containerIndex+0x40, slotIndex, itemId, slotIndex, containerIndex);
+        }
+
         public void UseEqItemWithOnGround(int slot, int itemId, int dstX, int dstY, int dstZ, int dstId, int dstStackPos)
         {
             UseWith(0xffff, slot+1, 0, itemId, 0, dstX, dstY, dstZ, dstId, dstStackPos);
@@ -30,6 +35,13 @@ namespace Thronia
             SendMessage("usewith(" + flag1.ToString() + "," + srcContainer.ToString() + "," + srcSlot.ToString() +
                 "," + useId.ToString() + "," + srcslot2.ToString() + "," + flag2.ToString() + "," + dstContainer.ToString() + "," +
                 dstSlot.ToString() + "," + dstId.ToString() + "," + dstStackPos.ToString() + ")" );
+        }
+
+
+        public void UseItem(int flag1, int src, int slotSrc, int itemId, int dstFlag, int dstbpid)
+        {
+            SendMessage("useitem(" + flag1.ToString() + "," + src.ToString() + "," + slotSrc.ToString() +","+
+                itemId.ToString() + "," + slotSrc.ToString() + "," + dstbpid.ToString() + ")");
         }
 
         void SendMessage(String data)
