@@ -1,5 +1,6 @@
 #include <Windows.h>
 //#include <winsock2.h>
+#include <vector>
 
 #pragma comment (lib, "Ws2_32.lib")
 
@@ -98,10 +99,10 @@ void(*_tibia_stop)() = (void(*)())0x00409140;
 void ProcessCommand(char *cmd)
 {
   char *tok;
-  char *delimiters = ",";
+  char *delimiters = "(,)";
   char* context = NULL;
 
-  tok = strtok_s(cmd, "(", &context);
+  tok = strtok_s(cmd, "delimiters", &context);
   if (strcmp(tok, "say") == 0)
   {
     tok = strtok_s(NULL, delimiters, &context);
