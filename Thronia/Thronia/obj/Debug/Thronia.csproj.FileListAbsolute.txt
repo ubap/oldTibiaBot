@@ -1,9 +1,0 @@
-c:\users\szeryf\documents\visual studio 2013\Projects\Thronia\Thronia\bin\Debug\Thronia.exe.config
-c:\users\szeryf\documents\visual studio 2013\Projects\Thronia\Thronia\bin\Debug\Thronia.exe
-c:\users\szeryf\documents\visual studio 2013\Projects\Thronia\Thronia\bin\Debug\Thronia.pdb
-c:\users\szeryf\documents\visual studio 2013\Projects\Thronia\Thronia\obj\Debug\Thronia.Properties.Resources.resources
-c:\users\szeryf\documents\visual studio 2013\Projects\Thronia\Thronia\obj\Debug\Thronia.csproj.GenerateResource.Cache
-c:\users\szeryf\documents\visual studio 2013\Projects\Thronia\Thronia\obj\Debug\Thronia.exe
-c:\users\szeryf\documents\visual studio 2013\Projects\Thronia\Thronia\obj\Debug\Thronia.pdb
-C:\Users\Szeryf\documents\visual studio 2013\Projects\Thronia\Thronia\obj\Debug\Thronia.Form1.resources
-C:\Users\Szeryf\documents\visual studio 2013\Projects\Thronia\Thronia\obj\Debug\Thronia.ClientSelector.resources

@@ -1,0 +1,6 @@
+﻿  main.cpp
+  Generating code
+  All 8 functions were compiled because no usable IPDB/IOBJ from previous compilation was found.
+  Finished generating code
+  inject_dll.vcxproj -> c:\users\ubap\documents\visual studio 2015\Projects\inject_dll\Release\inject_dll.dll
+  inject_dll.vcxproj -> c:\users\ubap\documents\visual studio 2015\Projects\inject_dll\Release\inject_dll.pdb (Full PDB)

@@ -1,0 +1,5 @@
+﻿  ActionExecutor.cpp
+c:\users\ubap\documents\visual studio 2015\projects\inject_dll\bot_\actionexecutor.cpp(45): warning C4800: 'BOOL': forcing value to bool 'true' or 'false' (performance warning)
+c:\users\ubap\documents\visual studio 2015\projects\inject_dll\bot_\actionexecutor.cpp(66): warning C4800: 'BOOL': forcing value to bool 'true' or 'false' (performance warning)
+  bot_.vcxproj -> C:\Users\ubap\documents\visual studio 2015\Projects\inject_dll\Debug\bot_.exe
+  bot_.vcxproj -> C:\Users\ubap\documents\visual studio 2015\Projects\inject_dll\Debug\bot_.pdb (Partial PDB)

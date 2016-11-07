@@ -1,0 +1,6 @@
+﻿C:\Program Files (x86)\MSBuild\Microsoft.Cpp\v4.0\V140\Microsoft.CppBuild.targets(392,5): warning MSB8028: The intermediate directory (Debug\) contains files shared from another project (pipe_client.vcxproj).  This can lead to incorrect clean and rebuild behavior.
+  main.cpp
+c:\users\ubap\documents\visual studio 2015\projects\inject_dll\pipe_client\main.cpp(36): warning C4101: 'chBuf': unreferenced local variable
+c:\users\ubap\documents\visual studio 2015\projects\inject_dll\pipe_client\main.cpp(38): warning C4101: 'cbRead': unreferenced local variable
+  pipe_client.vcxproj -> C:\Users\ubap\documents\visual studio 2015\Projects\inject_dll\Debug\payload_tests.exe
+  pipe_client.vcxproj -> C:\Users\ubap\documents\visual studio 2015\Projects\inject_dll\Debug\payload_tests.pdb (Partial PDB)
