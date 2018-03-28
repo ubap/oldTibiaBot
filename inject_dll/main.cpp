@@ -95,16 +95,21 @@ void(*_tibia_stop)() = (void(*)())0x00409140;
 
 void(*_tibia_attack)(unsigned int creatureid) = (void(*)(unsigned int))0x00408E40;
 
+
+// command ids
+static const int CMD_SAY = 0;
+static const int CMD_ATTACK = 1;
+
 FILE* f;
 
 void ProcessCommand(char *cmd)
 {
 	switch (cmd[0])
 	{
-		case 0:
+		case CMD_SAY:
 			_tibia_say(cmd[1], &cmd[2]);
 			break;
-		case 1:
+		case CMD_ATTACK:
 			_tibia_attack(*(unsigned int*)&cmd[1]);
 			break;
 		default:
@@ -121,8 +126,7 @@ void PipeControl()
 	fopen_s(&f, "payload_debug.dat", "a+");
 	DWORD pId = GetCurrentProcessId();
 	char pipeName[256];
-	sprintf_s(pipeName, "\\\\.\\pipe\\thronia%d", pId);
-
+	sprintf_s(pipeName, "\\\\.\\pipe\\oldTibiaBot%d", pId);
 
 start_listening:
 	// Create a pipe to send data

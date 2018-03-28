@@ -1,6 +1,5 @@
-﻿C:\Program Files (x86)\MSBuild\Microsoft.Cpp\v4.0\V140\Microsoft.CppBuild.targets(392,5): warning MSB8028: The intermediate directory (Debug\) contains files shared from another project (pipe_client.vcxproj).  This can lead to incorrect clean and rebuild behavior.
+﻿D:\Programy\Microsoft Visual Studio\2017\Community\Common7\IDE\VC\VCTargets\Microsoft.CppBuild.targets(387,5): warning MSB8028: Katalog pośredni (Debug\) zawiera pliki udostępnione z innego projektu (pipe_client.vcxproj). Może to spowodować niepoprawne zachowanie podczas oczyszczania i ponownej kompilacji.
   main.cpp
-c:\users\ubap\documents\visual studio 2015\projects\inject_dll\pipe_client\main.cpp(36): warning C4101: 'chBuf': unreferenced local variable
-c:\users\ubap\documents\visual studio 2015\projects\inject_dll\pipe_client\main.cpp(38): warning C4101: 'cbRead': unreferenced local variable
-  pipe_client.vcxproj -> C:\Users\ubap\documents\visual studio 2015\Projects\inject_dll\Debug\payload_tests.exe
-  pipe_client.vcxproj -> C:\Users\ubap\documents\visual studio 2015\Projects\inject_dll\Debug\payload_tests.pdb (Partial PDB)
+c:\users\jakub\source\repos\oldtibiabot\pipe_client\main.cpp(35): warning C4101: "chBuf": lokalna zmienna, do której nie istnieje odwołanie
+c:\users\jakub\source\repos\oldtibiabot\pipe_client\main.cpp(37): warning C4101: "cbRead": lokalna zmienna, do której nie istnieje odwołanie
+  pipe_client.vcxproj -> C:\Users\Jakub\Source\Repos\oldTibiaBot\Debug\payload_tests.exe

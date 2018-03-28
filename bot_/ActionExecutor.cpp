@@ -8,7 +8,7 @@ ActionExecutor::ActionExecutor(MemoryReader& memoryReader)
 {
 	m_pRemoryReader = &memoryReader;
 	uint32_t pId = memoryReader.getPId();
-	std::string m_sPipeName = "\\\\.\\pipe\\thronia";
+	std::string m_sPipeName = "\\\\.\\pipe\\oldTibiaBot";
 	m_sPipeName += std::to_string((uint32_t)pId);
 
 	bool fSuccess = false;

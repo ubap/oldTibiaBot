@@ -12,9 +12,12 @@ int main(void)
 {
 	ClientFinder clientFinder;
 
-	clientFinder.getClients();
+	std::vector<ProcessDesc> vClients = clientFinder.getClients();
 
-	INJECTOR::inject(clientFinder.getClients()[0].getpId(), "payload.dll");
+	if (vClients.size() == 0)
+		return 1;
+
+	INJECTOR::inject(vClients[0].getpId(), "payload.dll");
 	MemoryReader memoryReader(clientFinder.getClients()[0].getpId());
 
 	Battlelist battleList = memoryReader.getBattleList();

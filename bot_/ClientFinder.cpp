@@ -48,7 +48,7 @@ void ClientFinder::findClients()
 
 			// Populate process list
 			std::string processName(szProcessName);
-			if (processName == "Kasti.exe")
+			if (processName == "Tibijka.exe")
 			{
 				std::string characterName = readCharacterName(processID);
 				processList.push_back(ProcessDesc(processID, characterName));
