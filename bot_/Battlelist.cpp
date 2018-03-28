@@ -14,6 +14,7 @@ Battlelist::~Battlelist()
 
 void Battlelist::init(BattleListEntry_t* pBattleList)
 {
+	m_vCreatures.clear();
 	for (int i = 0; i < CONSTS::BATTLELIST_SIZE; i++)
 	{
 		if (pBattleList[i].Visible)

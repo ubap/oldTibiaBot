@@ -31,8 +31,7 @@ Battlelist& MemoryReader::getBattleList()
 
 Player& MemoryReader::getPlayer()
 {
-	if (!m_pPlayer)
-		m_pPlayer = new Player(*this);
+	m_pPlayer = new Player(*this);
 
 	return *m_pPlayer;
 }
