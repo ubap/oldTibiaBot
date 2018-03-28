@@ -17,6 +17,8 @@ int main(void)
 	if (vClients.size() == 0)
 		return 1;
 
+	std::cout << vClients[0].getCharacterName() << std::endl;
+
 	INJECTOR::inject(vClients[0].getpId(), "payload.dll");
 	MemoryReader memoryReader(clientFinder.getClients()[0].getpId());
 
@@ -32,5 +34,6 @@ int main(void)
 
 	//actionExecutor.attack(nearestCreature->getId());
 
+	system("pause");
 	return 0;
 }

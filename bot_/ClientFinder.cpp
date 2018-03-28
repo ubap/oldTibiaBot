@@ -65,35 +65,24 @@ std::string ClientFinder::readCharacterName(DWORD pId)
 	std::string characterName = "<unknown>";
 	HANDLE pHandle = OpenProcess(PROCESS_ALL_ACCESS, false, pId);
 
-	// check if player logged in
-	uint8_t loggedIn;
-	ReadProcessMemory(pHandle, (LPCVOID)ADDR::LOGGED_IN, &loggedIn, sizeof(loggedIn), NULL);
+	// read id of our player
+	uint32_t selfId;
+	ReadProcessMemory(pHandle, (LPCVOID)ADDR::SELF_ID, &selfId, sizeof(selfId), NULL);
 
-	if (loggedIn == CONSTS::LOGGED_IN::YES)
+	// search the battlelist for entry for our player
+	const uint32_t bytesToRead = sizeof(BattleListEntry_t) * CONSTS::BATTLELIST_SIZE;
+	uint8_t battleList[bytesToRead];
+	ReadProcessMemory(pHandle, (LPCVOID)ADDR::BATTLELIST_BEGIN, battleList, bytesToRead, NULL);
+	BattleListEntry_t* pBattleList = (BattleListEntry_t*)battleList;
+
+	for (int i = 0; i < CONSTS::BATTLELIST_SIZE; i++)
 	{
-		// read id of our player
-		uint32_t selfId;
-		ReadProcessMemory(pHandle, (LPCVOID)ADDR::SELF_ID, &selfId, sizeof(selfId), NULL);
-
-		// search the battlelist for entry for our player
-		const uint32_t bytesToRead = sizeof(BattleListEntry_t) * CONSTS::BATTLELIST_SIZE;
-		uint8_t battleList[bytesToRead];
-		ReadProcessMemory(pHandle, (LPCVOID)ADDR::BATTLELIST_BEGIN, battleList, bytesToRead, NULL);
-		BattleListEntry_t* pBattleList = (BattleListEntry_t*)battleList;
-
-		for (int i = 0; i < CONSTS::BATTLELIST_SIZE; i++)
+		if (pBattleList[i].id == selfId)
 		{
-			if (pBattleList[i].id == selfId)
-			{
-				characterName = pBattleList[i].name;
-				break;
-			}
-
+			characterName = pBattleList[i].name;
+			break;
 		}
-	}
-	else
-	{
-		characterName = "<not logged in>";
+
 	}
 	CloseHandle(pHandle);
 
