@@ -17,6 +17,7 @@ public:
 	DWORD getpId() { return m_pID; };
 	std::string getCharacterName() { return m_CharacterName; };
 private:
+
 	DWORD m_pID;
 	std::string m_CharacterName;
 };
@@ -24,7 +25,7 @@ private:
 class ClientFinder
 {
 public:
-	ClientFinder() {};
+	ClientFinder(std::string executableName) : m_ExecutableName(executableName) {};
 	~ClientFinder() {};
 	std::vector<ProcessDesc>& getClients();
 
@@ -32,6 +33,7 @@ private:
 	void findClients();
 	std::string readCharacterName(DWORD pId);
 
+	std::string m_ExecutableName;
 	std::vector<ProcessDesc> processList;
 };
 

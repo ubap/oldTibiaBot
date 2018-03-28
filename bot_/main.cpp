@@ -10,7 +10,7 @@
 
 int main(void)
 {
-	ClientFinder clientFinder;
+	ClientFinder clientFinder("Tibijka.exe");
 
 	std::vector<ProcessDesc> vClients = clientFinder.getClients();
 
@@ -25,7 +25,7 @@ int main(void)
 	Player p = memoryReader.getPlayer();
 
 	ActionExecutor actionExecutor(memoryReader);
-	//actionExecutor.say("blol xD");
+	actionExecutor.say("blol xD");
 	actionExecutor.mapClick(p.getPosX() + 1, p.getPosY(), p.getPosZ());
 
 	const Creature* nearestCreature = Utils::findNearestCreature(p, memoryReader.getBattleList().getCreatures());
