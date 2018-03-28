@@ -1,5 +1,0 @@
-﻿D:\Programy\Microsoft Visual Studio\2017\Community\Common7\IDE\VC\VCTargets\Microsoft.CppBuild.targets(387,5): warning MSB8028: Katalog pośredni (Debug\) zawiera pliki udostępnione z innego projektu (pipe_client.vcxproj). Może to spowodować niepoprawne zachowanie podczas oczyszczania i ponownej kompilacji.
-  main.cpp
-c:\users\jakub\source\repos\oldtibiabot\pipe_client\main.cpp(35): warning C4101: "chBuf": lokalna zmienna, do której nie istnieje odwołanie
-c:\users\jakub\source\repos\oldtibiabot\pipe_client\main.cpp(37): warning C4101: "cbRead": lokalna zmienna, do której nie istnieje odwołanie
-  pipe_client.vcxproj -> C:\Users\Jakub\Source\Repos\oldTibiaBot\Debug\payload_tests.exe
