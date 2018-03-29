@@ -100,7 +100,7 @@ void ActionExecutor::mapClick(uint32_t posX, uint32_t posY, uint32_t posZ)
 	m_pRemoryReader->writeData(ADDR::GOTO_Y, (char*)&posY, 4);
 	m_pRemoryReader->writeData(ADDR::GOTO_Z, (char*)&posZ, 4);
 
-	uint32_t battleListOffset = c->getBattlelistPos() * sizeof(BattleListEntry_t) + CONSTS::BATTELIST_WALKING_OFFESET;
+	uint32_t battleListOffset = c->getBattleListPos() * sizeof(BattleListEntry_t) + CONSTS::BATTELIST_WALKING_OFFESET;
 	uint32_t data = 1;
 	m_pRemoryReader->writeData(ADDR::BATTLELIST_BEGIN + battleListOffset, (char*)&data, 4);
 }

@@ -31,7 +31,10 @@ Battlelist& MemoryReader::getBattleList()
 
 Player& MemoryReader::getPlayer()
 {
-	m_pPlayer = new Player(*this);
+	uint32_t selfId = getSelfId();
+	const Creature* self = getBattleList().getCreature(selfId);
+
+	m_pPlayer = new Player(self->getBattleListEntry(), self->getBattleListPos());
 
 	return *m_pPlayer;
 }

@@ -2,9 +2,10 @@
 
 
 
-Creature::Creature(BattleListEntry_t* pBattleListEntry, uint32_t battlelistPos)
+Creature::Creature(BattleListEntry_t* pBattleListEntry, uint32_t nBattleListPos)
 {
-	m_nBattlelistPos = battlelistPos;
+	m_pBattleListEntry = pBattleListEntry;
+	m_nBattleListPos = nBattleListPos;
 	m_nCreatureId = pBattleListEntry->id;
 	m_sName = pBattleListEntry->name;
 	m_nHPpc = pBattleListEntry->HPBar;
@@ -17,6 +18,16 @@ Creature::Creature(BattleListEntry_t* pBattleListEntry, uint32_t battlelistPos)
 
 Creature::~Creature()
 {
+}
+
+BattleListEntry_t* Creature::getBattleListEntry() const
+{
+	return m_pBattleListEntry;
+}
+
+uint32_t Creature::getBattleListPos() const
+{
+	return m_nBattleListPos;
 }
 
 std::string Creature::getName() const
@@ -42,11 +53,6 @@ uint32_t Creature::getPosZ() const
 uint32_t Creature::getId() const
 {
 	return m_nCreatureId;
-}
-
-uint32_t Creature::getBattlelistPos() const
-{
-	return m_nBattlelistPos;
 }
 
 uint32_t Creature::getIsWalking() const

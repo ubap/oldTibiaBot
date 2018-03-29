@@ -7,10 +7,11 @@
 class Creature
 {
 public:
-	Creature(BattleListEntry_t*, uint32_t battlelistPos);
+	Creature(BattleListEntry_t*, uint32_t battleListPos);
 	~Creature();
 
-	uint32_t getBattlelistPos() const;
+	BattleListEntry_t* getBattleListEntry() const;
+	uint32_t getBattleListPos() const;
 	uint32_t getId() const;
 	std::string getName() const;
 	uint32_t getPosX() const;
@@ -19,7 +20,8 @@ public:
 	uint32_t getIsWalking() const;
 
 private:
-	uint32_t m_nBattlelistPos;
+	BattleListEntry_t* m_pBattleListEntry;
+	uint32_t m_nBattleListPos;
 	uint32_t m_nCreatureId;
 	std::string m_sName;
 	uint32_t m_nHPpc;
