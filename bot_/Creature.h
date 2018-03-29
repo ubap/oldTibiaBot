@@ -14,6 +14,7 @@ public:
 	uint32_t getBattleListPos() const;
 	uint32_t getId() const;
 	std::string getName() const;
+	uint32_t getHPpc() const;
 	uint32_t getPosX() const;
 	uint32_t getPosY() const;
 	uint32_t getPosZ() const;

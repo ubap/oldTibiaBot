@@ -35,6 +35,11 @@ std::string Creature::getName() const
 	return m_sName;
 }
 
+uint32_t Creature::getHPpc() const
+{
+	return m_nHPpc;
+}
+
 uint32_t Creature::getPosX() const
 {
 	return m_nPosX;

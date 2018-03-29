@@ -38,9 +38,10 @@ int main(void)
 		std::vector<Creature> creatures = memoryReader.getBattleList().getCreatures();
 		std::vector<std::string> names;
 		for (int i = 0; i < creatures.size(); i++) {
-			names.push_back(creatures.at(i).getName());
-			int distance = Utils::calcDist(p, creatures.at(i));
-			std::cout << creatures.at(i).getName() << " - distance: " << distance << std::endl;
+			Creature creature = creatures.at(i);
+			names.push_back(creature.getName());
+			int distance = Utils::calcDist(p, creature);
+			std::cout << creature.getName() << " - distance: " << distance << ", hppc: " << creature.getHPpc() << std::endl;
 		}
 
 
