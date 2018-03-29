@@ -11,6 +11,9 @@ namespace ADDR
 	static const uint32_t GOTO_Y			= 0x00635F50;
 	static const uint32_t GOTO_Z			= 0x00635F4C;
 
+	static const uint32_t HP				= 0x00635F0C;
+	static const uint32_t MP				= 0x00635EF0;
+	static const uint32_t CAP				= 0x00635EE0;
 }
 
 namespace CONSTS

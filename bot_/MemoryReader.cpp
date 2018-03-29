@@ -15,6 +15,13 @@ MemoryReader::~MemoryReader()
 {
 }
 
+uint32_t MemoryReader::readUint32_t(uint32_t address)
+{
+	uint32_t value;
+	ReadProcessMemory(m_pHandle, (LPCVOID)address, &value, sizeof(uint32_t), NULL);
+	return value;
+}
+
 Battlelist& MemoryReader::getBattleList()
 {
 
@@ -34,7 +41,7 @@ Player& MemoryReader::getPlayer()
 	uint32_t selfId = getSelfId();
 	const Creature* self = getBattleList().getCreature(selfId);
 
-	m_pPlayer = new Player(self->getBattleListEntry(), self->getBattleListPos());
+	m_pPlayer = new Player(*this, self->getBattleListEntry(), self->getBattleListPos());
 
 	return *m_pPlayer;
 }

@@ -34,6 +34,7 @@ int main(void)
 	while (1)
 	{
 		p = memoryReader.getPlayer();
+		std::cout << "Self HP: " << p.getHp() << ", self MP: " << p.getMp() << ", cap: " << p.getCap() << std::endl << std::endl;
 
 		std::vector<Creature> creatures = memoryReader.getBattleList().getCreatures();
 		std::vector<std::string> names;

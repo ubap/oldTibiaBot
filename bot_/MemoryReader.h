@@ -22,6 +22,7 @@ public:
 	uint32_t getPId();
 	void writeSelfIsWalking(bool);
 	void writeData(uint32_t address, char* buff, uint32_t size);
+	uint32_t readUint32_t(uint32_t address);
 private:
 	DWORD m_pId;
 	HANDLE m_pHandle;
