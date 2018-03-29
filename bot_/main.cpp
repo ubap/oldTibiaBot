@@ -10,6 +10,8 @@
 #include "Utils.h"
 #include "Injector.h"
 
+#include "Tests.h";
+
 int main(void)
 {
 	ClientFinder clientFinder("Tibijka.exe");
@@ -24,6 +26,11 @@ int main(void)
 	INJECTOR::inject(vClients[0].getpId(), "payload.dll");
 	MemoryReader memoryReader(clientFinder.getClients()[0].getpId());
 
+	randomWalk(memoryReader);
+	//testEquipment(memoryReader);
+	// testBackpacks(memoryReader);
+
+
 	Battlelist battleList = memoryReader.getBattleList();
 
 	Player p = memoryReader.getPlayer();
@@ -35,7 +42,6 @@ int main(void)
 	while (1)
 	{
 		Inventory inventory = memoryReader.getInventory();
-		std::vector<BackpackWindow_t> openBackpacks = inventory.getOpenBackpacks();
 
 		p = memoryReader.getPlayer();
 		std::cout << "Self HP: " << p.getHp() << ", self MP: " << p.getMp() << ", cap: " << p.getCap() << std::endl << std::endl;

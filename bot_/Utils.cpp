@@ -1,6 +1,7 @@
 #include "Utils.h"
 
 #include <math.h>
+#include <sstream>
 
 #include "Player.h"
 #include "Creature.h"
@@ -39,4 +40,11 @@ const Creature* Utils::findNearestCreature(const Player& p, const std::vector<Cr
 	}
 
 	return nearestCreature;
+}
+
+std::string Utils::itemString(const ItemEntry_t& itemEntry) {
+	std::stringstream stream;
+
+	stream << "id: " << itemEntry.id << ", extraData1: " << itemEntry.extraData1 << ", extraData2: " << itemEntry.extraData2;
+	return stream.str();
 }

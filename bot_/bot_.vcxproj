@@ -113,6 +113,7 @@
     <ClCompile Include="ActionExecutor.cpp" />
     <ClCompile Include="Battlelist.cpp" />
     <ClCompile Include="ClientFinder.cpp" />
+    <ClCompile Include="Container.cpp" />
     <ClCompile Include="Creature.cpp" />
     <ClCompile Include="Injector.cpp" />
     <ClCompile Include="Inventory.cpp" />
@@ -127,12 +128,14 @@
     <ClInclude Include="Battlelist.h" />
     <ClInclude Include="ClientFinder.h" />
     <ClInclude Include="config.h" />
+    <ClInclude Include="Container.h" />
     <ClInclude Include="Creature.h" />
     <ClInclude Include="Injector.h" />
     <ClInclude Include="Inventory.h" />
     <ClInclude Include="MemoryReader.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="resource.h" />
+    <ClInclude Include="Tests.h" />
     <ClInclude Include="Utils.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

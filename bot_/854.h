@@ -81,7 +81,16 @@ static_assert(sizeof(ItemEntry_t) == 12, "error item entry");
 #pragma pack(1)
 struct Equipment_t
 {
-	ItemEntry_t slot[10];
+	ItemEntry_t Head;
+	ItemEntry_t Necklace;
+	ItemEntry_t Backpack;
+	ItemEntry_t Armor;
+	ItemEntry_t RightHand;
+	ItemEntry_t LeftHand;
+	ItemEntry_t Legs;
+	ItemEntry_t Boots;
+	ItemEntry_t Ring;
+	ItemEntry_t Arrow;
 };
 #pragma pack(pop)
 static_assert(sizeof(Equipment_t) == 120, "error inventory");

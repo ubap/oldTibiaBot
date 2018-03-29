@@ -57,6 +57,9 @@
     <ClCompile Include="Inventory.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Container.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ClientFinder.h">
@@ -93,6 +96,12 @@
       <Filter>Header Files\memory</Filter>
     </ClInclude>
     <ClInclude Include="Inventory.h">
+      <Filter>Header Files\game</Filter>
+    </ClInclude>
+    <ClInclude Include="Tests.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Container.h">
       <Filter>Header Files\game</Filter>
     </ClInclude>
   </ItemGroup>

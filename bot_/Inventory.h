@@ -4,6 +4,7 @@
 
 #include <vector>
 
+class Container;
 class MemoryReader;
 
 class Inventory
@@ -13,7 +14,7 @@ public:
 	~Inventory() {};
 
 	const Equipment_t& getEquipment() const { return m_oInventory.Equipment; }
-	std::vector<BackpackWindow_t> getOpenBackpacks();
+	std::vector<Container> getOpenContainers();
 
 private:
 	Inventory_t m_oInventory;
