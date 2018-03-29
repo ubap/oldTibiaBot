@@ -23,6 +23,8 @@ namespace CONSTS
 	enum LOGGED_IN { NO = 1, YES = 2};
 	static const uint32_t BATTLELIST_SIZE = 250;
 	static const uint32_t BATTELIST_WALKING_OFFESET = 76;
+
+	static const uint32_t MAX_CONTAINER_WINDOWS = 16;
 }
 
 #pragma pack(push)
@@ -84,3 +86,19 @@ struct Equipment_t
 #pragma pack(pop)
 static_assert(sizeof(Equipment_t) == 120, "error inventory");
 
+struct BackpackWindow_t
+{
+	uint32_t Open;
+	ItemEntry_t Backpack;
+	uint8_t WindowName[40];
+	uint32_t ItemCount;
+	ItemEntry_t BackpackItem[36];
+};
+static_assert(sizeof(BackpackWindow_t) == 492, "error inventory");
+
+struct Inventory_t
+{
+	Equipment_t Equipment;
+	BackpackWindow_t BackpackWindows[CONSTS::MAX_CONTAINER_WINDOWS];
+};
+// todo: is there anything else after inventory struct?

@@ -35,6 +35,7 @@ int main(void)
 	while (1)
 	{
 		Inventory inventory = memoryReader.getInventory();
+		std::vector<BackpackWindow_t> openBackpacks = inventory.getOpenBackpacks();
 
 		p = memoryReader.getPlayer();
 		std::cout << "Self HP: " << p.getHp() << ", self MP: " << p.getMp() << ", cap: " << p.getCap() << std::endl << std::endl;
