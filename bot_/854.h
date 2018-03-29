@@ -14,6 +14,8 @@ namespace ADDR
 	static const uint32_t HP				= 0x00635F0C;
 	static const uint32_t MP				= 0x00635EF0;
 	static const uint32_t CAP				= 0x00635EE0;
+
+	static const uint32_t INVENTORY_BEGIN   = 0x00642BC8;
 }
 
 namespace CONSTS
@@ -60,5 +62,25 @@ struct BattleListEntry_t
 	// 163
 };
 #pragma pack(pop)
-
 static_assert(sizeof(BattleListEntry_t) == 168, "Bad battlelist structure size, the structure is probably corrupted");
+
+#pragma pack(push)
+#pragma pack(1)
+struct ItemEntry_t
+{
+	uint32_t id;
+	uint32_t extraData1;
+	uint32_t extraData2;
+};
+#pragma pack(pop)
+static_assert(sizeof(ItemEntry_t) == 12, "error item entry");
+
+#pragma pack(push)
+#pragma pack(1)
+struct Equipment_t
+{
+	ItemEntry_t slot[10];
+};
+#pragma pack(pop)
+static_assert(sizeof(Equipment_t) == 120, "error inventory");
+

@@ -2,6 +2,7 @@
 
 #include "Battlelist.h"
 #include "Player.h"
+#include "Inventory.h"
 
 MemoryReader::MemoryReader(DWORD pId) : m_pId(pId)
 {
@@ -20,6 +21,12 @@ uint32_t MemoryReader::readUint32_t(uint32_t address)
 	uint32_t value;
 	ReadProcessMemory(m_pHandle, (LPCVOID)address, &value, sizeof(uint32_t), NULL);
 	return value;
+}
+
+void* MemoryReader::readStructure(uint32_t address, uint32_t size, void* buffer)
+{
+	ReadProcessMemory(m_pHandle, (LPCVOID)address, buffer, size, NULL);
+	return buffer;
 }
 
 Battlelist& MemoryReader::getBattleList()
@@ -66,4 +73,9 @@ void MemoryReader::writeSelfIsWalking(bool)
 uint32_t MemoryReader::getPId()
 {
 	return m_pId;
+}
+
+Inventory MemoryReader::getInventory()
+{
+	return Inventory(*this);
 }

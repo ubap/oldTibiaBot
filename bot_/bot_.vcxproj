@@ -115,6 +115,7 @@
     <ClCompile Include="ClientFinder.cpp" />
     <ClCompile Include="Creature.cpp" />
     <ClCompile Include="Injector.cpp" />
+    <ClCompile Include="Inventory.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="MemoryReader.cpp" />
     <ClCompile Include="Player.cpp" />
@@ -128,6 +129,7 @@
     <ClInclude Include="config.h" />
     <ClInclude Include="Creature.h" />
     <ClInclude Include="Injector.h" />
+    <ClInclude Include="Inventory.h" />
     <ClInclude Include="MemoryReader.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="resource.h" />

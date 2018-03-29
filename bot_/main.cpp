@@ -6,6 +6,7 @@
 #include "Battlelist.h"
 #include "ActionExecutor.h"
 #include "Player.h"
+#include "Inventory.h"
 #include "Utils.h"
 #include "Injector.h"
 
@@ -33,6 +34,8 @@ int main(void)
 
 	while (1)
 	{
+		Inventory inventory = memoryReader.getInventory();
+
 		p = memoryReader.getPlayer();
 		std::cout << "Self HP: " << p.getHp() << ", self MP: " << p.getMp() << ", cap: " << p.getCap() << std::endl << std::endl;
 

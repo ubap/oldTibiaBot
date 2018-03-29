@@ -54,6 +54,9 @@
     <ClCompile Include="MemoryReader.cpp">
       <Filter>Source Files\memory</Filter>
     </ClCompile>
+    <ClCompile Include="Inventory.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ClientFinder.h">
@@ -88,6 +91,9 @@
     </ClInclude>
     <ClInclude Include="Injector.h">
       <Filter>Header Files\memory</Filter>
+    </ClInclude>
+    <ClInclude Include="Inventory.h">
+      <Filter>Header Files\game</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
