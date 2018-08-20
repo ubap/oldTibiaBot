@@ -14,7 +14,7 @@
 
 int main(void)
 {
-	ClientFinder clientFinder("Tibijka.exe");
+	ClientFinder clientFinder("Kasteria.exe");
 
 	std::vector<ProcessDesc> vClients = clientFinder.getClients();
 
@@ -26,7 +26,7 @@ int main(void)
 	INJECTOR::inject(vClients[0].getpId(), "payload.dll");
 	MemoryReader memoryReader(clientFinder.getClients()[0].getpId());
 
-	randomWalk(memoryReader);
+	// randomWalk(memoryReader);
 	//testEquipment(memoryReader);
 	// testBackpacks(memoryReader);
 

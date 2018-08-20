@@ -17,6 +17,7 @@ void ClientFinder::findClients()
 	for (i = 0; i < cProcesses; i++)
 	{
 		DWORD processID = aProcesses[i];
+		DWORD err;
 		if (processID != 0)
 		{
 			TCHAR szProcessName[MAX_PATH] = TEXT("<unknown>");
@@ -39,16 +40,16 @@ void ClientFinder::findClients()
 						sizeof(szProcessName) / sizeof(TCHAR));
 				} else
 				{
-					DWORD err = GetLastError();
+					err = GetLastError();
 				}
 			} else
 			{
-				DWORD err = GetLastError();
+				err = GetLastError();
 			}
 
 			// Populate process list
 			std::string processName(szProcessName);
-			if (processName == "Tibijka.exe")
+			if (processName == m_ExecutableName)
 			{
 				std::string characterName = readCharacterName(processID);
 				processList.push_back(ProcessDesc(processID, characterName));
