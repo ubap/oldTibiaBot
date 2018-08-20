@@ -20,8 +20,65 @@ int  command_5_len = sizeof(command_5);
 char command_6[] = { 0, 3, 'k', 'o', 'k', 's', '\0' };
 int  command_6_len = sizeof(command_6);
 
-char* commands[] =    { command_1    , command_2    , command_3    , command_4    , command_5    , command_6     };
-int command_sizes[] = { command_1_len, command_2_len, command_3_len, command_4_len, command_5_len, command_6_len };
+char* commands[]  =    { command_1    , command_2    , command_3    , command_4    , command_5    , command_6    };
+int command_sizes[]  = { command_1_len, command_2_len, command_3_len, command_4_len, command_5_len, command_6_len};
+
+void read_bytes_from_pipe(HANDLE pipe, int count, char* buffer, int bufferSize)
+{
+	DWORD totalNumBytesRead = 0;
+
+	while (totalNumBytesRead < count)
+	{
+		DWORD fSuccess, numBytesRead = 0;
+		fSuccess = ReadFile(
+			pipe,
+			buffer + totalNumBytesRead, // the data from the pipe will be put here
+			bufferSize, // number of bytes allocated
+			&numBytesRead, // this will store number of bytes actually read
+			NULL // not using overlapped IO
+		);
+		totalNumBytesRead += numBytesRead;
+
+		if (!fSuccess)
+		{
+			_tprintf(TEXT("ReadFile to pipe failed. GLE=%d\n"), GetLastError());
+			return;
+		}
+	}
+
+}
+
+void test_get_player_id(HANDLE pipe)
+{
+	_tprintf(TEXT("Executing test_get_player_id: "));
+	// given
+	char COMMAND[] = { 100 };
+	char* EXPECTED_RESULT = "Testowo";
+
+	// when
+	DWORD fSuccess, cbWritten;
+	fSuccess = WriteFile(
+		pipe, // pipe handle 
+		(LPTSTR)COMMAND, // message 
+		sizeof(COMMAND),              // message length 
+		&cbWritten,             // bytes written 
+		NULL);
+
+	char buffer[BUFSIZE];
+	// The read operation will block until there is data to read
+	DWORD numBytesRead = 0;
+	read_bytes_from_pipe(pipe, sizeof(EXPECTED_RESULT), buffer, BUFSIZE);
+
+	// then
+	if (memcmp(buffer, EXPECTED_RESULT, sizeof(EXPECTED_RESULT)) != 0)
+	{
+		_tprintf(TEXT("failed. return doesn't match: %s\n"), buffer);
+		return;
+	}
+	else {
+		_tprintf(TEXT("passed\n"));
+	}
+}
 
 int _tmain(int argc, TCHAR *argv[])
 {
@@ -47,7 +104,7 @@ int _tmain(int argc, TCHAR *argv[])
 	{
 		hPipe = CreateFile(
 			lpszPipename,   // pipe name 
-			GENERIC_WRITE,
+			GENERIC_READ | GENERIC_WRITE,
 			0,              // no sharing 
 			NULL,           // default security attributes
 			OPEN_EXISTING,  // opens existing pipe 
@@ -91,27 +148,30 @@ int _tmain(int argc, TCHAR *argv[])
 	}
 
 	// Send a message to the pipe server. 
-	for (int i = 0; i < sizeof(commands) / sizeof(char*); i++)
-	{
-		_tprintf(TEXT("Executing command %d\n"), i+1);
-		LPTSTR lpvMessage = commands[i];
-		cbToWrite = command_sizes[i];
+	//for (int i = 0; i < sizeof(commands) / sizeof(char*); i++)
+	//{
+	//	_tprintf(TEXT("Executing command %d\n"), i+1);
+	//	LPTSTR lpvMessage = commands[i];
+	//	cbToWrite = command_sizes[i];
 
-		fSuccess = WriteFile(
-			hPipe,                  // pipe handle 
-			lpvMessage,             // message 
-			cbToWrite,              // message length 
-			&cbWritten,             // bytes written 
-			NULL);
+	//	fSuccess = WriteFile(
+	//		hPipe,                  // pipe handle 
+	//		lpvMessage,             // message 
+	//		cbToWrite,              // message length 
+	//		&cbWritten,             // bytes written 
+	//		NULL);
 
-		Sleep(2000);
-	}
+	//	Sleep(2000);
+	//}
 
 	if (!fSuccess)
 	{
 		_tprintf(TEXT("WriteFile to pipe failed. GLE=%d\n"), GetLastError());
 		return -1;
 	}
+
+	// separate test suites
+	test_get_player_id(hPipe);
 
 	printf("\nMessage sent to server");
 

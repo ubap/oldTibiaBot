@@ -95,14 +95,28 @@ void(*_tibia_stop)() = (void(*)())0x00409140;
 
 void(*_tibia_attack)(unsigned int creatureid) = (void(*)(unsigned int))0x00408E40;
 
+// memory access methods
+void get_player_id(HANDLE pipe)
+{
+	WriteFile(
+		pipe,
+		"Testowo",
+		5, //        nNumberOfBytesToWrite,
+		NULL, // lpNumberOfBytesWritten,
+		NULL // lpOverlapped
+	);
+}
 
 // command ids
 static const int CMD_SAY = 0;
 static const int CMD_ATTACK = 1;
 
+// read commands
+static const int CMD_GET_PLAYER_ID = 100;
+
 FILE* f;
 
-void ProcessCommand(char *cmd)
+void ProcessCommand(char *cmd, HANDLE pipe)
 {
 	switch (cmd[0])
 	{
@@ -111,6 +125,9 @@ void ProcessCommand(char *cmd)
 			break;
 		case CMD_ATTACK:
 			_tibia_attack(*(unsigned int*)&cmd[1]);
+			break;
+		case CMD_GET_PLAYER_ID:
+			get_player_id(pipe);
 			break;
 		default:
 			break;
@@ -132,7 +149,7 @@ start_listening:
 	// Create a pipe to send data
 	HANDLE pipe = CreateNamedPipe(
 		pipeName, // name of the pipe
-		PIPE_ACCESS_INBOUND, // 1-way pipe -- raed only
+		PIPE_ACCESS_DUPLEX, // 2-way pipe
 		PIPE_TYPE_MESSAGE, // send data as a byte stream
 		1, // only allow 1 instance of this pipe
 		0, // no outbound buffer
@@ -168,7 +185,7 @@ start_listening:
 		if (result) {
 			buffer[numBytesRead] = 0;
 			fwrite(buffer, 1, numBytesRead+1, f);
-			ProcessCommand(buffer);
+			ProcessCommand(buffer, pipe);
 		}
 		else {
 			CloseHandle(pipe);
