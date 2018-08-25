@@ -2,6 +2,7 @@
 #include <cstdio>
 
 #include "PipeProtocolHandler.h"
+#include "PipeMessage.h"
 
 #define BUFLEN 512  //Max length of buffer
 
@@ -114,7 +115,7 @@ static const int CMD_SAY = 0;
 static const int CMD_ATTACK = 1;
 
 // read commands
-static const int CMD_GET_PLAYER_ID = 100;
+static const int CMD_READ_MEM = 100;
 
 FILE* f;
 
@@ -128,11 +129,28 @@ void ProcessCommand(char *cmd, HANDLE pipe)
 		case CMD_ATTACK:
 			_tibia_attack(*(unsigned int*)&cmd[1]);
 			break;
-		case CMD_GET_PLAYER_ID:
+		case CMD_READ_MEM:
 			get_player_id(pipe);
 			break;
 		default:
 			break;
+	}
+}
+
+void ProcessReadMem(PipeProtocolHandler* handler, PipeMessage* message) {
+	DWORD address = message->nextDWORD();
+	DWORD size = message->nextDWORD();
+	handler->sendData((char*)address, size);
+}
+
+void ProcessMessage(PipeProtocolHandler* handler, PipeMessage* message) {
+	unsigned char opCode = message->nextByte();
+	switch (opCode) {
+	case CMD_READ_MEM:
+		ProcessReadMem(handler, message);
+		break;
+	default:
+		break;
 	}
 }
 
@@ -147,7 +165,21 @@ void PipeControl()
 	char pipeName[256];
 	sprintf_s(pipeName, "\\\\.\\pipe\\oldTibiaBot%d", pId);
 
-	PipeProtocolHandler* pipeHandler = new PipeProtocolHandler(pipeName);
+	while (true) {
+		PipeProtocolHandler pipeHandler = PipeProtocolHandler(pipeName);
+		if (!pipeHandler.connect())
+			continue;
+
+		while (true) {
+			// handle incoming msgs
+			PipeMessage message = pipeHandler.readMessage();
+			if (message.error())
+				break;
+
+			ProcessMessage(&pipeHandler, &message);
+		}
+	}
+
 
 //start_listening:
 //	// Create a pipe to send data
@@ -196,8 +228,6 @@ void PipeControl()
 //			goto start_listening;
 //		}
 //	}
-
-	delete pipeHandler;
 }
 
 BOOL APIENTRY DllMain(HMODULE hModule, DWORD ul_reason_for_call, LPVOID lpReserved)

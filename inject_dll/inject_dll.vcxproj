@@ -112,10 +112,16 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="PipeMessage.cpp" />
     <ClCompile Include="PipeProtocolHandler.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="PipeMessage.h" />
     <ClInclude Include="PipeProtocolHandler.h" />
+    <ClInclude Include="resource.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="payload.rc" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

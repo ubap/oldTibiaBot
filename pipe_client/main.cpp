@@ -53,10 +53,16 @@ void test_get_player_id(HANDLE pipe)
 	_tprintf(TEXT("Executing test_get_player_id: "));
 	// given
 	char COMMAND[] = { 100 };
-	char* EXPECTED_RESULT = "Testowo";
-
+	DWORD LENGTH = sizeof(COMMAND) + 8;
 	// when
 	DWORD fSuccess, cbWritten;
+	fSuccess = WriteFile(
+		pipe, // pipe handle 
+		(LPTSTR)&LENGTH, // message 
+		4,              // message length 
+		&cbWritten,             // bytes written 
+		NULL);
+
 	fSuccess = WriteFile(
 		pipe, // pipe handle 
 		(LPTSTR)COMMAND, // message 
@@ -64,20 +70,29 @@ void test_get_player_id(HANDLE pipe)
 		&cbWritten,             // bytes written 
 		NULL);
 
+	DWORD SELF_ID_ADDRESS = 0x00635F10;
+	DWORD SELF_ID_SIZE = 4;
+
+	fSuccess = WriteFile(
+		pipe, // pipe handle 
+		(LPTSTR)&SELF_ID_ADDRESS, // message 
+		4,              // message length 
+		&cbWritten,             // bytes written 
+		NULL);
+
+	fSuccess = WriteFile(
+		pipe, // pipe handle 
+		(LPTSTR)&SELF_ID_SIZE, // message 
+		4,              // message length 
+		&cbWritten,             // bytes written 
+		NULL);
+
 	char buffer[BUFSIZE];
 	// The read operation will block until there is data to read
 	DWORD numBytesRead = 0;
-	read_bytes_from_pipe(pipe, sizeof(EXPECTED_RESULT), buffer, BUFSIZE);
+	read_bytes_from_pipe(pipe, 4, buffer, BUFSIZE);
 
-	// then
-	if (memcmp(buffer, EXPECTED_RESULT, sizeof(EXPECTED_RESULT)) != 0)
-	{
-		_tprintf(TEXT("failed. return doesn't match: %s\n"), buffer);
-		return;
-	}
-	else {
-		_tprintf(TEXT("passed\n"));
-	}
+	printf("0x%08x\n", *((unsigned int*) buffer));
 }
 
 int _tmain(int argc, TCHAR *argv[])
