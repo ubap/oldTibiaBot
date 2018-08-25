@@ -95,6 +95,36 @@ void test_get_player_id(HANDLE pipe)
 	printf("0x%08x\n", *((unsigned int*) buffer));
 }
 
+void test_wsock_addr(HANDLE pipe)
+{
+	_tprintf(TEXT("Executing test_wsock_addr: "));
+	// given
+	char COMMAND[] = { 101 };
+	DWORD LENGTH = sizeof(COMMAND);
+	// when
+	DWORD fSuccess, cbWritten;
+	fSuccess = WriteFile(
+		pipe, // pipe handle 
+		(LPTSTR)&LENGTH, // message 
+		4,              // message length 
+		&cbWritten,             // bytes written 
+		NULL);
+
+	fSuccess = WriteFile(
+		pipe, // pipe handle 
+		(LPTSTR)COMMAND, // message 
+		sizeof(COMMAND),              // message length 
+		&cbWritten,             // bytes written 
+		NULL);
+
+	char buffer[BUFSIZE];
+	// The read operation will block until there is data to read
+	DWORD numBytesRead = 0;
+	read_bytes_from_pipe(pipe, 4, buffer, BUFSIZE);
+
+	printf("0x%08x\n", *((unsigned int*)buffer));
+}
+
 int _tmain(int argc, TCHAR *argv[])
 {
 	if (argc != 2)
@@ -187,6 +217,7 @@ int _tmain(int argc, TCHAR *argv[])
 
 	// separate test suites
 	test_get_player_id(hPipe);
+	test_wsock_addr(hPipe);
 
 	printf("\nMessage sent to server");
 

@@ -116,6 +116,7 @@ static const int CMD_ATTACK = 1;
 
 // read commands
 static const int CMD_READ_MEM = 100;
+static const int CMD_WSOCK_ADDR = 101;
 
 FILE* f;
 
@@ -137,21 +138,28 @@ void ProcessCommand(char *cmd, HANDLE pipe)
 	}
 }
 
-void ProcessReadMem(PipeProtocolHandler* handler, PipeMessage* message) {
+bool ProcessReadMem(PipeProtocolHandler* handler, PipeMessage* message) {
 	DWORD address = message->nextDWORD();
 	DWORD size = message->nextDWORD();
-	handler->sendData((char*)address, size);
+	return handler->sendData((char*)address, size);
 }
 
-void ProcessMessage(PipeProtocolHandler* handler, PipeMessage* message) {
+bool ProcessDetermineWsockAddr(PipeProtocolHandler* handler) {
+	DWORD address = (DWORD) GetModuleHandle("ws2_32.dll");
+	return handler->sendData((char*)&address, sizeof(DWORD));
+}
+
+bool ProcessMessage(PipeProtocolHandler* handler, PipeMessage* message) {
 	unsigned char opCode = message->nextByte();
 	switch (opCode) {
 	case CMD_READ_MEM:
-		ProcessReadMem(handler, message);
-		break;
+		return ProcessReadMem(handler, message);
+	case CMD_WSOCK_ADDR:
+		return ProcessDetermineWsockAddr(handler);
 	default:
 		break;
 	}
+	return true;
 }
 
 /*
