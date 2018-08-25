@@ -1,6 +1,8 @@
 #include <Windows.h>
 #include <cstdio>
 
+#include "PipeProtocolHandler.h"
+
 #define BUFLEN 512  //Max length of buffer
 
 /*
@@ -145,53 +147,57 @@ void PipeControl()
 	char pipeName[256];
 	sprintf_s(pipeName, "\\\\.\\pipe\\oldTibiaBot%d", pId);
 
-start_listening:
-	// Create a pipe to send data
-	HANDLE pipe = CreateNamedPipe(
-		pipeName, // name of the pipe
-		PIPE_ACCESS_DUPLEX, // 2-way pipe
-		PIPE_TYPE_MESSAGE, // send data as a byte stream
-		1, // only allow 1 instance of this pipe
-		0, // no outbound buffer
-		0, // no inbound buffer
-		0, // use default wait time
-		NULL // use default security attributes
-	);
+	PipeProtocolHandler* pipeHandler = new PipeProtocolHandler(pipeName);
 
-	if (pipe == NULL || pipe == INVALID_HANDLE_VALUE) {
-		goto start_listening;
-	}
+//start_listening:
+//	// Create a pipe to send data
+//	HANDLE pipe = CreateNamedPipe(
+//		pipeName, // name of the pipe
+//		PIPE_ACCESS_DUPLEX, // 2-way pipe
+//		PIPE_TYPE_MESSAGE, // send data as a byte stream
+//		1, // only allow 1 instance of this pipe
+//		0, // no outbound buffer
+//		0, // no inbound buffer
+//		0, // use default wait time
+//		NULL // use default security attributes
+//	);
+//
+//	if (pipe == NULL || pipe == INVALID_HANDLE_VALUE) {
+//		goto start_listening;
+//	}
+//
+//	// This call blocks until a client process connects to the pipe
+//	BOOL result = ConnectNamedPipe(pipe, NULL);
+//	if (!result) {
+//		CloseHandle(pipe); // close the pipe
+//		goto start_listening;
+//	}
+//
+//	char buffer[BUFLEN];
+//	while (1)
+//	{
+//		// The read operation will block until there is data to read
+//		DWORD numBytesRead = 0;
+//		result = ReadFile(
+//			pipe,
+//			buffer, // the data from the pipe will be put here
+//			BUFLEN * sizeof(char), // number of bytes allocated
+//			&numBytesRead, // this will store number of bytes actually read
+//			NULL // not using overlapped IO
+//		);
+//
+//		if (result) {
+//			buffer[numBytesRead] = 0;
+//			fwrite(buffer, 1, numBytesRead+1, f);
+//			ProcessCommand(buffer, pipe);
+//		}
+//		else {
+//			CloseHandle(pipe);
+//			goto start_listening;
+//		}
+//	}
 
-	// This call blocks until a client process connects to the pipe
-	BOOL result = ConnectNamedPipe(pipe, NULL);
-	if (!result) {
-		CloseHandle(pipe); // close the pipe
-		goto start_listening;
-	}
-
-	char buffer[BUFLEN];
-	while (1)
-	{
-		// The read operation will block until there is data to read
-		DWORD numBytesRead = 0;
-		result = ReadFile(
-			pipe,
-			buffer, // the data from the pipe will be put here
-			BUFLEN * sizeof(char), // number of bytes allocated
-			&numBytesRead, // this will store number of bytes actually read
-			NULL // not using overlapped IO
-		);
-
-		if (result) {
-			buffer[numBytesRead] = 0;
-			fwrite(buffer, 1, numBytesRead+1, f);
-			ProcessCommand(buffer, pipe);
-		}
-		else {
-			CloseHandle(pipe);
-			goto start_listening;
-		}
-	}
+	delete pipeHandler;
 }
 
 BOOL APIENTRY DllMain(HMODULE hModule, DWORD ul_reason_for_call, LPVOID lpReserved)
