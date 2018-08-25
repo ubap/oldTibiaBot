@@ -2,7 +2,7 @@
 
 #include <Windows.h>
 
-#include <string.h>
+#include <string>
 
 PipeMessage::PipeMessage(char* data, unsigned int dataLength)
 {
@@ -39,7 +39,6 @@ unsigned char PipeMessage::nextByte() {
 	return val;
 }
 
-
 DWORD PipeMessage::nextDWORD() {
 	if (m_pos + 4 > m_dataLength) {
 		m_error = true;
@@ -48,5 +47,25 @@ DWORD PipeMessage::nextDWORD() {
 
 	DWORD val = *((DWORD*)(m_data + m_pos));
 	m_pos += 4;
+	return val;
+}
+
+std::string PipeMessage::nextString() {
+	if (m_error) {
+		return std::string("error");
+	}
+	bool nullTerminated = false;
+	for (int i = 0; i < 1024 && i + m_pos < m_dataLength; i++) {
+		if (m_data[m_pos + i] == 0) {
+			nullTerminated = true;
+		}
+	}
+	if (!nullTerminated) {
+		m_error = true;
+		return std::string("error");
+	}
+
+	std::string val = std::string(m_data + m_pos);
+	m_pos += val.length() + 1;
 	return val;
 }

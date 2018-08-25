@@ -1,5 +1,6 @@
 #include <Windows.h>
 #include <cstdio>
+#include <string>
 
 #include "PipeProtocolHandler.h"
 #include "PipeMessage.h"
@@ -11,7 +12,7 @@ say:      mode=1
 whisper:  mode=2
 yell:     mode=3
 */
-void(*_tibia_say)(int mode, char* buff) = (void(*) (int, char*))0x00407310;
+void(*_tibia_say)(int mode, const char* buff) = (void(*) (int, const char*))0x00407310;
 
 void(*_tibia_turn_north)() = (void(*) ())0x00404730;
 void(*_tibia_turn_south)() = (void(*) ())0x00404A70;
@@ -98,17 +99,6 @@ void(*_tibia_stop)() = (void(*)())0x00409140;
 
 void(*_tibia_attack)(unsigned int creatureid) = (void(*)(unsigned int))0x00408E40;
 
-// memory access methods
-void get_player_id(HANDLE pipe)
-{
-	WriteFile(
-		pipe,
-		"Testowo",
-		5, //        nNumberOfBytesToWrite,
-		NULL, // lpNumberOfBytesWritten,
-		NULL // lpOverlapped
-	);
-}
 
 // command ids
 static const int CMD_SAY = 0;
@@ -117,6 +107,9 @@ static const int CMD_ATTACK = 1;
 // read commands
 static const int CMD_READ_MEM = 100;
 static const int CMD_WSOCK_ADDR = 101;
+
+// set memory commands
+
 
 FILE* f;
 
@@ -130,12 +123,20 @@ void ProcessCommand(char *cmd, HANDLE pipe)
 		case CMD_ATTACK:
 			_tibia_attack(*(unsigned int*)&cmd[1]);
 			break;
-		case CMD_READ_MEM:
-			get_player_id(pipe);
-			break;
 		default:
 			break;
 	}
+}
+
+bool ProcessSay(PipeProtocolHandler* handler, PipeMessage* message) {
+	unsigned char channel = message->nextByte();
+	std::string text = message->nextString();
+	switch (channel) {
+	case 1: case 2: case 3:
+		_tibia_say(channel, text.c_str());
+		return true;
+	}
+	return false;
 }
 
 bool ProcessReadMem(PipeProtocolHandler* handler, PipeMessage* message) {
@@ -152,6 +153,8 @@ bool ProcessDetermineWsockAddr(PipeProtocolHandler* handler) {
 bool ProcessMessage(PipeProtocolHandler* handler, PipeMessage* message) {
 	unsigned char opCode = message->nextByte();
 	switch (opCode) {
+	case CMD_SAY:
+		return ProcessSay(handler, message);
 	case CMD_READ_MEM:
 		return ProcessReadMem(handler, message);
 	case CMD_WSOCK_ADDR:

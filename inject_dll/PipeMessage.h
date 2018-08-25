@@ -1,5 +1,6 @@
 #pragma once
 
+#include <string>
 typedef unsigned long DWORD;
 
 class PipeMessage
@@ -19,4 +20,5 @@ public:
 
 	unsigned char nextByte();
 	DWORD nextDWORD();
+	std::string nextString();
 };

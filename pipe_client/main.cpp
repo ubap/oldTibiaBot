@@ -95,6 +95,86 @@ void test_get_player_id(HANDLE pipe)
 	printf("0x%08x\n", *((unsigned int*) buffer));
 }
 
+void test_logged_in(HANDLE pipe)
+{
+	_tprintf(TEXT("Executing test_logged_in: "));
+	// given
+	char COMMAND[] = { 100 };
+	DWORD LENGTH = sizeof(COMMAND) + 8;
+	// when
+	DWORD fSuccess, cbWritten;
+	fSuccess = WriteFile(
+		pipe, // pipe handle 
+		(LPTSTR)&LENGTH, // message 
+		4,              // message length 
+		&cbWritten,             // bytes written 
+		NULL);
+
+	fSuccess = WriteFile(
+		pipe, // pipe handle 
+		(LPTSTR)COMMAND, // message 
+		sizeof(COMMAND),              // message length 
+		&cbWritten,             // bytes written 
+		NULL);
+
+	DWORD SELF_ID_ADDRESS = 0x006454F8;
+	DWORD SELF_ID_SIZE = 4;
+
+	fSuccess = WriteFile(
+		pipe, // pipe handle 
+		(LPTSTR)&SELF_ID_ADDRESS, // message 
+		4,              // message length 
+		&cbWritten,             // bytes written 
+		NULL);
+
+	fSuccess = WriteFile(
+		pipe, // pipe handle 
+		(LPTSTR)&SELF_ID_SIZE, // message 
+		4,              // message length 
+		&cbWritten,             // bytes written 
+		NULL);
+
+	char buffer[BUFSIZE];
+	// The read operation will block until there is data to read
+	DWORD numBytesRead = 0;
+	read_bytes_from_pipe(pipe, 4, buffer, BUFSIZE);
+
+	DWORD pointer = *((unsigned int*)buffer) + 0x4C;
+
+	fSuccess = WriteFile(
+		pipe, // pipe handle 
+		(LPTSTR)&LENGTH, // message 
+		4,              // message length 
+		&cbWritten,             // bytes written 
+		NULL);
+
+	fSuccess = WriteFile(
+		pipe, // pipe handle 
+		(LPTSTR)COMMAND, // message 
+		sizeof(COMMAND),              // message length 
+		&cbWritten,             // bytes written 
+		NULL);
+
+	fSuccess = WriteFile(
+		pipe, // pipe handle 
+		(LPTSTR)&pointer, // message 
+		4,              // message length 
+		&cbWritten,             // bytes written 
+		NULL);
+
+	fSuccess = WriteFile(
+		pipe, // pipe handle 
+		(LPTSTR)&SELF_ID_SIZE, // message 
+		4,              // message length 
+		&cbWritten,             // bytes written 
+		NULL);
+
+
+	numBytesRead = 0;
+	read_bytes_from_pipe(pipe, 4, buffer, BUFSIZE);
+	printf("0x%08x\n", *((unsigned int*)buffer));
+}
+
 void test_wsock_addr(HANDLE pipe)
 {
 	_tprintf(TEXT("Executing test_wsock_addr: "));
@@ -123,6 +203,31 @@ void test_wsock_addr(HANDLE pipe)
 	read_bytes_from_pipe(pipe, 4, buffer, BUFSIZE);
 
 	printf("0x%08x\n", *((unsigned int*)buffer));
+}
+
+void test_say(HANDLE pipe)
+{
+	_tprintf(TEXT("Executing test_say: "));
+	// given
+	char COMMAND[] = { 0, 1, 't', 'e', 's', 't', 0};
+	DWORD LENGTH = sizeof(COMMAND);
+	// when
+	DWORD fSuccess, cbWritten;
+	fSuccess = WriteFile(
+		pipe, // pipe handle 
+		(LPTSTR)&LENGTH, // message 
+		4,              // message length 
+		&cbWritten,             // bytes written 
+		NULL);
+
+	fSuccess = WriteFile(
+		pipe, // pipe handle 
+		(LPTSTR)COMMAND, // message 
+		sizeof(COMMAND),              // message length 
+		&cbWritten,             // bytes written 
+		NULL);
+
+	printf("executed\n");
 }
 
 int _tmain(int argc, TCHAR *argv[])
@@ -218,6 +323,8 @@ int _tmain(int argc, TCHAR *argv[])
 	// separate test suites
 	test_get_player_id(hPipe);
 	test_wsock_addr(hPipe);
+	test_logged_in(hPipe);
+	test_say(hPipe);
 
 	printf("\nMessage sent to server");
 
