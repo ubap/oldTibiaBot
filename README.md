@@ -1,6 +1,6 @@
 # oldTibiaBot
 
-Rebuilt with c++. <br \>
+Rebuilt with c++.
 still at very early stage. <br \>
 Built everything into one VS 2015 solution.<br \> <br \>
 
