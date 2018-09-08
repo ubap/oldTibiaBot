@@ -10,8 +10,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
-import java.nio.ByteBuffer;
-import java.nio.ByteOrder;
 
 public class GameWorld {
     private static final Logger log = LoggerFactory.getLogger(GameWorld.class);
@@ -30,10 +28,9 @@ public class GameWorld {
     }
 
     /**
-     * Returns creature describing Self, blocks thread for few moments if self is not found in the BattleList.
-     * This happens on Re-Log
-     * @return
-     * @throws IOException
+     * Returns creature describing Self,
+     * blocks thread for few moments if self is not found in the BattleList. This happen on Re-Log
+     * @return Creature representing Self or null if timed out.
      */
     public Creature getSelf() throws IOException {
         int retries = 0;

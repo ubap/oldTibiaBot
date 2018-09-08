@@ -77,8 +77,7 @@ public class BattleList {
 
     /**
      *
-     *
-     * @param name
+     * @param name Name of the creature to look for.
      * @return Null if creature with given name is not found.
      */
     public Creature getCreatureByName(String name) {

@@ -198,7 +198,9 @@ public class Test extends Application {
     @FXML
     private void getClosestCreature() {
         try {
-            Creature closestCreature = this.gameworld.getBattleList().getClosestCreature(this.gameworld.getSelf());
+            Creature self = this.gameworld.getSelf();
+            Creature closestCreature =
+                    this.gameworld.getBattleList().getClosestCreature(self);
             if (closestCreature != null) {
                 this.targetNameTextField.setText(closestCreature.getName());
             }
