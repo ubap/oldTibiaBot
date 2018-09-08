@@ -4,22 +4,19 @@ import controller.Pipe;
 import controller.PipeMessage;
 import controller.PipeResponse;
 import controller.constants.Consts854;
+import controller.game.world.Creature;
 import lombok.Getter;
 
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
-import java.util.ArrayList;
-import java.util.List;
 
 public class GameWorld {
     @Getter
     private Pipe pipe;
-    private BattleListReader battleListReader;
 
     public GameWorld(Pipe pipe) {
         this.pipe = pipe;
-        this.battleListReader = new BattleListReader(this.pipe);
     }
 
     public Integer getSelfId() throws IOException {
@@ -28,31 +25,38 @@ public class GameWorld {
         return pipeResponse.getData().getInt();
     }
 
-    public BattleListEntry getSelf() throws IOException {
-        Integer playerId = getSelfId();
-        List<BattleListEntry> battleListEntryList = this.battleListReader.read();
-        for (BattleListEntry battleListEntry : battleListEntryList) {
-            if (battleListEntry.getId().equals(playerId)) {
-                return battleListEntry;
+    /**
+     * Returns creature describing Self, blocks thread for few moments if self is not found in the battlelist.
+     * This happens on Re-Log
+     * @return
+     * @throws IOException
+     */
+    public Creature getSelf() throws IOException {
+        int retries = 0;
+        Creature self;
+        while (retries < 200) {
+            self = BattleList.allVisible(this.pipe).getCreatureById(getSelfId());
+            if (self != null) {
+                return self;
+            }
+            retries++;
+            try {
+                System.out.println("Waiting because self not found in battlelist, retries: " + retries);
+                Thread.sleep(5);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
             }
         }
-        throw new RuntimeException("self not found in the battlelist");
+        return null;
     }
 
     /**
-     * Returns Visible creatures. Except self.
-     * @return List
+     * Returns battlelist with all visible creatures, without self.
+     *
+     * @return BattleList
      */
-    public List<BattleListEntry> getCreatures() throws IOException {
-        List<BattleListEntry> result = new ArrayList<>();
-        Integer playerId = getSelfId();
-        List<BattleListEntry> battleListEntryList = this.battleListReader.read();
-        for (BattleListEntry battleListEntry : battleListEntryList) {
-            if (!battleListEntry.getId().equals(playerId) && battleListEntry.isVisible()) {
-                result.add(battleListEntry);
-            }
-        }
-        return result;
+    public BattleList getBattleList() throws IOException {
+        return BattleList.allVisibleWithoutGiven(this.pipe, getSelfId());
     }
 
     public Integer getPlayerHp() throws IOException {

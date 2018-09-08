@@ -1,9 +1,8 @@
 package ui;
 
 import controller.Pipe;
-import controller.game.BattleListEntry;
+import controller.game.world.Creature;
 import controller.game.GameWorld;
-import controller.game.Utils;
 import javafx.application.Application;
 import javafx.concurrent.Task;
 import javafx.fxml.FXML;
@@ -14,8 +13,9 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
-import java.util.List;
-
+/**
+ * Test module for all the features so manual tests can be easier performed.
+ */
 public class Test extends Application {
 
     @FXML private TextField sayTextField;
@@ -42,6 +42,9 @@ public class Test extends Application {
 
     }
 
+    /**
+     * This approach with maany async tasks is very silly. Can be refactored if there's some time.
+     */
     @FXML
     private void initialize() {
         setupGameWorld();
@@ -183,12 +186,9 @@ public class Test extends Application {
     private void attack() {
         try {
             String targetName = this.targetNameTextField.getText();
-            if (targetName.length() > 0) {
-                List<BattleListEntry> creatures = this.gameworld.getCreatures();
-                BattleListEntry creature = Utils.getCreatureByName(targetName, creatures);
-                if (creature != null) {
-                    this.gameworld.attack(creature.getId());
-                }
+            Creature creature = this.gameworld.getBattleList().getCreatureByName(targetName);
+            if (creature != null) {
+                this.gameworld.attack(creature.getId());
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -198,9 +198,7 @@ public class Test extends Application {
     @FXML
     private void getClosestCreature() {
         try {
-            List<BattleListEntry> creatures = this.gameworld.getCreatures();
-            BattleListEntry closestCreature
-                    = Utils.closestCreature(this.gameworld.getSelf(), creatures);
+            Creature closestCreature = this.gameworld.getBattleList().getClosestCreature(this.gameworld.getSelf());
             if (closestCreature != null) {
                 this.targetNameTextField.setText(closestCreature.getName());
             }

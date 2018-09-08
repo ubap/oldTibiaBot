@@ -1,4 +1,4 @@
-package controller.game;
+package controller.game.world;
 
 import lombok.Getter;
 
@@ -6,7 +6,10 @@ import java.nio.ByteBuffer;
 
 import static controller.constants.Consts854.BATTLELIST_ENTRY_SIZE;
 
-public class BattleListEntry {
+/**
+ * Not mutable.
+ */
+public class Creature {
 
     @Getter
     private Integer id;
@@ -38,7 +41,7 @@ public class BattleListEntry {
     private Integer party;
 
 
-    public BattleListEntry(ByteBuffer byteBuffer) {
+    public Creature(ByteBuffer byteBuffer) {
         final int startPosition = byteBuffer.position();
 
         // id

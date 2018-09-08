@@ -18,9 +18,9 @@
                      <children>
                         <TextField fx:id="sayTextField" layoutX="14.0" layoutY="14.0" />
                         <Button fx:id="sayBtn" layoutX="169.0" layoutY="14.0" mnemonicParsing="false" onAction="#say" prefHeight="25.0" prefWidth="48.0" text="Say" />
-                        <TextField fx:id="targetNameTextField" layoutX="14.0" layoutY="47.0" prefHeight="25.0" prefWidth="101.0" />
+                        <TextField fx:id="targetNameTextField" layoutX="14.0" layoutY="47.0" prefHeight="25.0" prefWidth="148.0" />
                         <Button layoutX="167.0" layoutY="47.0" mnemonicParsing="false" onAction="#attack" text="Attack" />
-                        <Button fx:id="closestCreatureButton" layoutX="115.0" layoutY="47.0" mnemonicParsing="false" onAction="#getClosestCreature" text="Button" />
+                        <Button fx:id="closestCreatureButton" layoutX="13.0" layoutY="79.0" mnemonicParsing="false" onAction="#getClosestCreature" text="Get Closest Creature" />
                      </children>
                   </AnchorPane>
             </content>
