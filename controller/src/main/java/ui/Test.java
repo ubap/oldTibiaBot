@@ -188,7 +188,7 @@ public class Test extends Application {
             String targetName = this.targetNameTextField.getText();
             Creature creature = this.gameworld.getBattleList().getCreatureByName(targetName);
             if (creature != null) {
-                this.gameworld.attack(creature.getId());
+                this.gameworld.attack(creature);
             }
         } catch (Exception e) {
             e.printStackTrace();

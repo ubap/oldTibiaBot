@@ -6,12 +6,16 @@ import controller.PipeResponse;
 import controller.constants.Consts854;
 import controller.game.world.Creature;
 import lombok.Getter;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 
 public class GameWorld {
+    private static final Logger log = LoggerFactory.getLogger(GameWorld.class);
+
     @Getter
     private Pipe pipe;
 
@@ -26,7 +30,7 @@ public class GameWorld {
     }
 
     /**
-     * Returns creature describing Self, blocks thread for few moments if self is not found in the battlelist.
+     * Returns creature describing Self, blocks thread for few moments if self is not found in the BattleList.
      * This happens on Re-Log
      * @return
      * @throws IOException
@@ -41,17 +45,17 @@ public class GameWorld {
             }
             retries++;
             try {
-                System.out.println("Waiting because self not found in battlelist, retries: " + retries);
+                log.warn("Waiting because self not found in BattleList, retries: {}", retries);
                 Thread.sleep(5);
             } catch (InterruptedException e) {
-                e.printStackTrace();
+                log.error("thread interrupted", e);
             }
         }
         return null;
     }
 
     /**
-     * Returns battlelist with all visible creatures, without self.
+     * Returns BattleList with all visible creatures, without self.
      *
      * @return BattleList
      */
@@ -73,17 +77,20 @@ public class GameWorld {
         this.pipe.send(PipeMessage.say(text));
     }
 
-    public void attack(Integer creatureId) throws IOException {
+    public void attack(Creature creature) throws IOException {
+        if (!creature.getPositionZ().equals(getSelf().getPositionZ())) {
+            log.warn("Cannot attack: {}, pos Z didn't match", creature.toString());
+            return;
+        }
+        log.info("Attack: {}", creature.toString());
         // send a packet to game world
-        this.pipe.send(PipeMessage.attack(creatureId));
-        ByteBuffer byteBuffer = ByteBuffer.allocate(4);
-        byteBuffer.order(ByteOrder.LITTLE_ENDIAN);
-        byteBuffer.putInt(creatureId);
-        this.pipe.send(PipeMessage.writeMemory(Consts854.TARGET_ID, 4, byteBuffer.array()));
+        this.pipe.send(PipeMessage.attack(creature.getId()));
+        this.pipe.send(PipeMessage.writeInt(Consts854.TARGET_ID, creature.getId()));
     }
 
     public Long getHits() {
         return this.pipe.getHits();
     }
+
 
 }

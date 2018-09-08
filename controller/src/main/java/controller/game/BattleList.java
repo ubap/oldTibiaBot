@@ -66,8 +66,7 @@ public class BattleList {
             if (!creature.getPositionZ().equals(from.getPositionZ())) {
                 continue;
             }
-            int currentDistance = Math.abs(from.getPositionX() - creature.getPositionX())
-                    + Math.abs(from.getPositionY() - creature.getPositionY());
+            int currentDistance = from.distanceTo(creature);
             if (distance > currentDistance) {
                 distance = currentDistance;
                 closesCreature = creature;

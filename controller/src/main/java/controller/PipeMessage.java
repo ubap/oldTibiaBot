@@ -35,6 +35,13 @@ public class PipeMessage {
         return pipeMessage;
     }
 
+    public static PipeMessage writeInt(Integer address, Integer val) {
+        ByteBuffer byteBuffer = ByteBuffer.allocate(4);
+        byteBuffer.order(ByteOrder.LITTLE_ENDIAN);
+        byteBuffer.putInt(val);
+        return writeMemory(address, 4, byteBuffer.array());
+    }
+
     public static PipeMessage writeMemory(Integer address, Integer size, byte[] data) {
         PipeMessage pipeMessage = new PipeMessage();
         pipeMessage.byteBuffer.putInt(9 + size);

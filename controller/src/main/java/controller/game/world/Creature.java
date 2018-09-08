@@ -101,4 +101,27 @@ public class Creature {
         return this.visible != 0;
     }
 
+    /**
+     *
+     * @param other the creature to calculate distance to. Z is not considered
+     * @return Distance calculated using Manhattan.
+     */
+    public int distanceTo(Creature other) {
+        return Math.abs(getPositionX() - other.getPositionX())
+                + Math.abs(getPositionY() - other.getPositionY());
+    }
+
+
+    @Override
+    public String toString() {
+        return new StringBuilder()
+                .append("[0x")
+                .append(Integer.toHexString(this.id))
+                .append(", ")
+                .append(this.name)
+                .append("]")
+                .toString();
+    }
+
+
 }
