@@ -1,6 +1,7 @@
 package ui;
 
 import controller.Pipe;
+import controller.constants.Consts854;
 import controller.game.world.Creature;
 import controller.game.GameWorld;
 import javafx.application.Application;
@@ -212,7 +213,7 @@ public class Test extends Application {
     private void setupGameWorld() {
         try {
             Pipe pipe = Pipe.forName("\\\\.\\pipe\\oldTibiaBot17096");
-            gameworld = new GameWorld(pipe);
+            gameworld = new GameWorld(pipe, new Consts854());
         } catch (Exception e) {
             e.printStackTrace();
         }

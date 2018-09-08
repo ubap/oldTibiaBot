@@ -3,7 +3,7 @@ package controller.game;
 import controller.Pipe;
 import controller.PipeMessage;
 import controller.PipeResponse;
-import controller.constants.Consts854;
+import controller.constants.Constants;
 import controller.game.world.Creature;
 import lombok.Getter;
 import org.slf4j.Logger;
@@ -16,14 +16,17 @@ public class GameWorld {
 
     @Getter
     private Pipe pipe;
+    @Getter
+    private Constants constants;
 
-    public GameWorld(Pipe pipe) {
+    public GameWorld(Pipe pipe, Constants constants) {
         this.pipe = pipe;
+        this.constants = constants;
     }
 
     public Integer getSelfId() throws IOException {
         PipeResponse pipeResponse
-                = this.pipe.send(PipeMessage.readMemory(Consts854.ADDR_PLAYER_ID, 4));
+                = this.pipe.send(PipeMessage.readMemory(this.constants.addressPlayerId(), 4));
         return pipeResponse.getData().getInt();
     }
 
@@ -36,7 +39,7 @@ public class GameWorld {
         int retries = 0;
         Creature self;
         while (retries < 200) {
-            self = BattleList.allVisible(this.pipe).getCreatureById(getSelfId());
+            self = BattleList.allVisible(this).getCreatureById(getSelfId());
             if (self != null) {
                 return self;
             }
@@ -57,16 +60,18 @@ public class GameWorld {
      * @return BattleList
      */
     public BattleList getBattleList() throws IOException {
-        return BattleList.allVisibleWithoutGiven(this.pipe, getSelfId());
+        return BattleList.allVisibleWithoutGiven(this, getSelfId());
     }
 
     public Integer getPlayerHp() throws IOException {
-        PipeResponse pipeResponse = this.pipe.send(PipeMessage.readMemory(Consts854.PLAYER_HP, 4));
+        PipeResponse pipeResponse = this.pipe.send(
+                PipeMessage.readMemory(this.constants.addressPlayerHp(), 4));
         return pipeResponse.getData().getInt();
     }
 
     public Integer getPlayerMp() throws IOException {
-        PipeResponse pipeResponse = this.pipe.send(PipeMessage.readMemory(Consts854.PLAYER_MP, 4));
+        PipeResponse pipeResponse = this.pipe.send(
+                PipeMessage.readMemory(this.constants.addressPlayerMp(), 4));
         return pipeResponse.getData().getInt();
     }
 
@@ -82,7 +87,7 @@ public class GameWorld {
         log.info("Attack: {}", creature.toString());
         // send a packet to game world
         this.pipe.send(PipeMessage.attack(creature.getId()));
-        this.pipe.send(PipeMessage.writeInt(Consts854.TARGET_ID, creature.getId()));
+        this.pipe.send(PipeMessage.writeInt(this.constants.addressTargetId(), creature.getId()));
     }
 
     public Long getHits() {

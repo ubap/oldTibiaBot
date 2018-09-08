@@ -4,8 +4,6 @@ import lombok.Getter;
 
 import java.nio.ByteBuffer;
 
-import static controller.constants.Consts854.BATTLELIST_ENTRY_SIZE;
-
 /**
  * Not mutable.
  */
@@ -42,8 +40,6 @@ public class Creature {
 
 
     public Creature(ByteBuffer byteBuffer) {
-        final int startPosition = byteBuffer.position();
-
         // id
         this.id = byteBuffer.getInt();
         // name
@@ -90,11 +86,6 @@ public class Creature {
         byteBuffer.getInt();
         // unknown so far, todo
         byteBuffer.getInt();
-
-        if (byteBuffer.position() != startPosition + BATTLELIST_ENTRY_SIZE) {
-            // todo this is not an runtime exception
-            throw new RuntimeException("incorrect battlelist structure");
-        }
     }
 
     public boolean isVisible() {

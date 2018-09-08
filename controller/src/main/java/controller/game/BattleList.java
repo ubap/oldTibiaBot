@@ -1,6 +1,5 @@
 package controller.game;
 
-import controller.Pipe;
 import controller.PipeMessage;
 import controller.PipeResponse;
 import controller.game.world.Creature;
@@ -9,9 +8,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import static controller.constants.Consts854.ADDR_BATTLELIST_START;
-import static controller.constants.Consts854.BATTLELIST_ENTRY_SIZE;
-import static controller.constants.Consts854.BATTLELIST_MAX_ENTRIES;
 
 /**
  * Not mutable.
@@ -21,14 +17,16 @@ public class BattleList {
 
     private BattleList() { }
 
-    public static BattleList allVisible(Pipe pipe) throws IOException {
+    public static BattleList allVisible(GameWorld gameWorld) throws IOException {
 
         PipeMessage readMemoryMessage = PipeMessage.readMemory(
-                ADDR_BATTLELIST_START, BATTLELIST_MAX_ENTRIES * BATTLELIST_ENTRY_SIZE);
-        PipeResponse pipeResponse = pipe.send(readMemoryMessage);
+                gameWorld.getConstants().addressBattleListStart(),
+                gameWorld.getConstants().battleListMaxEntries()
+                        * gameWorld.getConstants().battleListEntrySize());
+        PipeResponse pipeResponse = gameWorld.getPipe().send(readMemoryMessage);
         BattleList battleList = new BattleList();
-        battleList.creatureList = new ArrayList<>(BATTLELIST_MAX_ENTRIES);
-        for (int i = 0; i < BATTLELIST_MAX_ENTRIES; i++) {
+        battleList.creatureList = new ArrayList<>(gameWorld.getConstants().battleListMaxEntries());
+        for (int i = 0; i < gameWorld.getConstants().battleListMaxEntries(); i++) {
             Creature creature = new Creature(pipeResponse.getData());
             // this basically means this creature is VALID
             if (creature.isVisible()) {
@@ -38,10 +36,10 @@ public class BattleList {
         return battleList;
     }
 
-    public static BattleList allVisibleWithoutGiven(Pipe pipe, Integer creatureId)
+    public static BattleList allVisibleWithoutGiven(GameWorld gameWorld, Integer creatureId)
             throws IOException {
 
-        BattleList battleList = BattleList.allVisible(pipe);
+        BattleList battleList = BattleList.allVisible(gameWorld);
         Creature creatureToRemove = null;
         for (Creature creature : battleList.creatureList) {
             if (creature.getId().equals(creatureId)) {

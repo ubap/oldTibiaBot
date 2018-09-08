@@ -1,4 +1,5 @@
 import controller.Pipe;
+import controller.constants.Consts854;
 import controller.game.GameWorld;
 
 public class Main {
@@ -8,7 +9,7 @@ public class Main {
         try {
 
             Pipe pipe = Pipe.forName("\\\\.\\pipe\\oldTibiaBot5556");
-            GameWorld gameWorld = new GameWorld(pipe);
+            GameWorld gameWorld = new GameWorld(pipe, new Consts854());
 
             while (true) {
                 String playerName = gameWorld.getSelf().getName();
