@@ -12,8 +12,11 @@ public class BattleListEntry {
     private Integer id;
     @Getter
     private String name;
+    @Getter
     private Integer positionX;
+    @Getter
     private Integer positionY;
+    @Getter
     private Integer positionZ;
     private Integer screenX;
     private Integer screenY;
@@ -89,6 +92,10 @@ public class BattleListEntry {
             // todo this is not an runtime exception
             throw new RuntimeException("incorrect battlelist structure");
         }
+    }
+
+    public boolean isVisible() {
+        return this.visible != 0;
     }
 
 }

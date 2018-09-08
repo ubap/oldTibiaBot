@@ -109,24 +109,11 @@ static const int CMD_READ_MEM = 100;
 static const int CMD_WSOCK_ADDR = 101;
 
 // set memory commands
+static const int CMD_WRITE_MEM = 200;
 
 
 FILE* f;
 
-void ProcessCommand(char *cmd, HANDLE pipe)
-{
-	switch (cmd[0])
-	{
-		case CMD_SAY:
-			_tibia_say(cmd[1], &cmd[2]);
-			break;
-		case CMD_ATTACK:
-			_tibia_attack(*(unsigned int*)&cmd[1]);
-			break;
-		default:
-			break;
-	}
-}
 
 bool ProcessSay(PipeProtocolHandler* handler, PipeMessage* message) {
 	unsigned char channel = message->nextByte();
@@ -139,10 +126,26 @@ bool ProcessSay(PipeProtocolHandler* handler, PipeMessage* message) {
 	return false;
 }
 
+bool ProcessAttack(PipeProtocolHandler* handler, PipeMessage* message) {
+	unsigned int cId = message->nextDWORD();
+	_tibia_attack(cId);
+	return true;
+}
+
 bool ProcessReadMem(PipeProtocolHandler* handler, PipeMessage* message) {
 	DWORD address = message->nextDWORD();
 	DWORD size = message->nextDWORD();
 	return handler->sendData((char*)address, size);
+}
+
+bool ProcessWriteMem(PipeMessage* message) {
+	DWORD address = message->nextDWORD();
+	DWORD size = message->nextDWORD();
+	const char* data = message->nextBytes(size);
+	if (data == nullptr)
+		return false;
+	memcpy((void*) address, data, size);
+	return true;
 }
 
 bool ProcessDetermineWsockAddr(PipeProtocolHandler* handler) {
@@ -159,6 +162,10 @@ bool ProcessMessage(PipeProtocolHandler* handler, PipeMessage* message) {
 		return ProcessReadMem(handler, message);
 	case CMD_WSOCK_ADDR:
 		return ProcessDetermineWsockAddr(handler);
+	case CMD_ATTACK:
+		return ProcessAttack(handler, message);
+	case CMD_WRITE_MEM:
+		return ProcessWriteMem(message);
 	default:
 		break;
 	}

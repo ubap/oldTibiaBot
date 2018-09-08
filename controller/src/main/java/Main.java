@@ -11,7 +11,7 @@ public class Main {
             GameWorld gameWorld = new GameWorld(pipe);
 
             while (true) {
-                String playerName = gameWorld.getPlayerName();
+                String playerName = gameWorld.getSelf().getName();
                 Integer playerHp = gameWorld.getPlayerHp();
                 System.out.println(playerName + ", hp: " + playerHp);
             }

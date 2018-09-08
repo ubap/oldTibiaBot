@@ -20,4 +20,5 @@ public:
 	unsigned char nextByte();
 	DWORD nextDWORD();
 	const char* nextText();
+	const char* nextBytes(unsigned int count);
 };

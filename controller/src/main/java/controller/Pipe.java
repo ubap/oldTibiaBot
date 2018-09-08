@@ -1,5 +1,7 @@
 package controller;
 
+import lombok.Getter;
+
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.RandomAccessFile;
@@ -10,6 +12,8 @@ import java.nio.ByteOrder;
 public class Pipe {
 
     private RandomAccessFile file;
+    // for diagnosis purposes
+    @Getter private long hits;
 
     public static Pipe forName(String name) throws FileNotFoundException {
         RandomAccessFile file = new RandomAccessFile(name, "rw");
@@ -18,9 +22,11 @@ public class Pipe {
 
     private Pipe(RandomAccessFile file) {
         this.file = file;
+        this.hits = 0;
     }
 
-    public PipeResponse send(PipeMessage pipeMessage) throws IOException {
+    public synchronized PipeResponse send(PipeMessage pipeMessage) throws IOException {
+        this.hits++;
         this.file.write(pipeMessage.array());
         int responseLength = pipeMessage.getResponseLength();
         if (responseLength > 0) {

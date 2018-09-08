@@ -26,6 +26,26 @@ public class PipeMessage {
         return pipeMessage;
     }
 
+    public static PipeMessage attack(Integer creatureId) {
+        PipeMessage pipeMessage = new PipeMessage();
+        pipeMessage.byteBuffer.putInt(5);
+        pipeMessage.byteBuffer.put((byte) 1);//  CMD_ATTACK
+        pipeMessage.byteBuffer.putInt(creatureId);
+        pipeMessage.responseLength = 0;
+        return pipeMessage;
+    }
+
+    public static PipeMessage writeMemory(Integer address, Integer size, byte[] data) {
+        PipeMessage pipeMessage = new PipeMessage();
+        pipeMessage.byteBuffer.putInt(9 + size);
+        pipeMessage.byteBuffer.put((byte) 200);//  CMD_WRITE_MEM
+        pipeMessage.byteBuffer.putInt(address);
+        pipeMessage.byteBuffer.putInt(size);
+        pipeMessage.byteBuffer.put(data, 0, size);
+        pipeMessage.responseLength = 0;
+        return pipeMessage;
+    }
+
     /**
      * Create Pipe Message for read Memory opcode.
      *

@@ -71,3 +71,16 @@ const char* PipeMessage::nextText() {
 	m_pos += length + 1;
 	return val;
 }
+
+const char* PipeMessage::nextBytes(unsigned int count) {
+	if (m_error) {
+		return nullptr;
+	}
+	if ((unsigned int)(m_pos + count) > (unsigned int)(m_data + m_dataLength)) {
+		m_error = true;
+		return nullptr;
+	}
+	char *val = m_data + m_pos;
+	m_pos += count;
+	return val;
+}
