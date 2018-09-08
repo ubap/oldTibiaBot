@@ -27,6 +27,7 @@ public class PipeMessage {
     }
 
     /**
+     * Create Pipe Message for read Memory opcode.
      *
      * @param address 32 bit unsigned
      * @param size 32 bit unsigned

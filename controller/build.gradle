@@ -5,6 +5,18 @@ apply plugin: 'java'
 
 sourceCompatibility = 1.8
 
+apply plugin: 'checkstyle'
+checkstyle {
+    toolVersion '8.12'
+    configFile file("config/checkstyle/checkstyle.xml")
+}
+checkstyleMain {
+    source ='src/main/java'
+}
+checkstyleTest {
+    source ='src/test/java'
+}
+
 repositories {
     mavenCentral()
 }

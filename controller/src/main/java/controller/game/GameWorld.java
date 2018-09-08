@@ -18,7 +18,8 @@ public class GameWorld {
     }
 
     public String getPlayerName() throws IOException {
-        PipeResponse pipeResponse = this.pipe.send(PipeMessage.readMemory(Consts854.ADDR_PLAYER_ID, 4));
+        PipeResponse pipeResponse
+                = this.pipe.send(PipeMessage.readMemory(Consts854.ADDR_PLAYER_ID, 4));
         Integer playerId = pipeResponse.getData().getInt();
         List<BattleListEntry> battleListEntryList = this.battleListReader.read();
         for (BattleListEntry battleListEntry : battleListEntryList) {

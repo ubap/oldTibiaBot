@@ -36,7 +36,7 @@ public class BattleListEntry {
 
 
     public BattleListEntry(ByteBuffer byteBuffer) {
-        int startPosition = byteBuffer.position();
+        final int startPosition = byteBuffer.position();
 
         // id
         this.id = byteBuffer.getInt();

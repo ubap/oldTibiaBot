@@ -20,7 +20,8 @@ public class BattleListReader {
     }
 
     public List<BattleListEntry> read() throws IOException {
-        PipeMessage readMemoryMessage = PipeMessage.readMemory(ADDR_BATTLELIST_START, BATTLELIST_MAX_ENTRIES * BATTLELIST_ENTRY_SIZE);
+        PipeMessage readMemoryMessage = PipeMessage.readMemory(
+                ADDR_BATTLELIST_START, BATTLELIST_MAX_ENTRIES * BATTLELIST_ENTRY_SIZE);
         PipeResponse pipeResponse = this.pipe.send(readMemoryMessage);
         pipeResponse.isError();
 
