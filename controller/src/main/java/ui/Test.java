@@ -1,8 +1,6 @@
 package ui;
 
 import controller.Pipe;
-import controller.PipeMessage;
-import controller.constants.Consts854;
 import controller.game.BattleListEntry;
 import controller.game.GameWorld;
 import controller.game.Utils;
@@ -16,8 +14,6 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
-import java.nio.ByteBuffer;
-import java.nio.ByteOrder;
 import java.util.List;
 
 public class Test extends Application {
@@ -203,7 +199,8 @@ public class Test extends Application {
     private void getClosestCreature() {
         try {
             List<BattleListEntry> creatures = this.gameworld.getCreatures();
-            BattleListEntry closestCreature = Utils.closestCreature(this.gameworld.getSelf(), creatures);
+            BattleListEntry closestCreature
+                    = Utils.closestCreature(this.gameworld.getSelf(), creatures);
             if (closestCreature != null) {
                 this.targetNameTextField.setText(closestCreature.getName());
             }

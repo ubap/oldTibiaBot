@@ -41,8 +41,7 @@ public class GameWorld {
 
     /**
      * Returns Visible creatures. Except self.
-     * @return
-     * @throws IOException
+     * @return List
      */
     public List<BattleListEntry> getCreatures() throws IOException {
         List<BattleListEntry> result = new ArrayList<>();
