@@ -130,10 +130,10 @@ void ProcessCommand(char *cmd, HANDLE pipe)
 
 bool ProcessSay(PipeProtocolHandler* handler, PipeMessage* message) {
 	unsigned char channel = message->nextByte();
-	std::string text = message->nextString();
+	const char* text = message->nextText();
 	switch (channel) {
 	case 1: case 2: case 3:
-		_tibia_say(channel, text.c_str());
+		_tibia_say(channel, text);
 		return true;
 	}
 	return false;

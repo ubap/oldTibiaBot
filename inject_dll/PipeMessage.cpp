@@ -50,22 +50,24 @@ DWORD PipeMessage::nextDWORD() {
 	return val;
 }
 
-std::string PipeMessage::nextString() {
+const char* PipeMessage::nextText() {
 	if (m_error) {
-		return std::string("error");
+		return nullptr;
 	}
 	bool nullTerminated = false;
+	int length = 0;
 	for (int i = 0; i < 1024 && i + m_pos < m_dataLength; i++) {
 		if (m_data[m_pos + i] == 0) {
 			nullTerminated = true;
+			length = i;
 		}
 	}
 	if (!nullTerminated) {
 		m_error = true;
-		return std::string("error");
+		return nullptr;
 	}
 
-	std::string val = std::string(m_data + m_pos);
-	m_pos += val.length() + 1;
+	char *val = m_data + m_pos;
+	m_pos += length + 1;
 	return val;
 }
