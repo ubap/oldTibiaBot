@@ -36,4 +36,8 @@ public class PipeResponse {
     public boolean isError() {
         return error;
     }
+
+    public ByteBuffer getData() {
+        return data;
+    }
 }

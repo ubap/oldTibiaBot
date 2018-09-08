@@ -1,5 +1,6 @@
 package controller;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.nio.ByteBuffer;
@@ -10,7 +11,12 @@ public class Pipe {
 
     private RandomAccessFile file;
 
-    public Pipe(RandomAccessFile file) {
+    public static Pipe forName(String name) throws FileNotFoundException {
+        RandomAccessFile file = new RandomAccessFile(name, "rw");
+        return new Pipe(file);
+    }
+
+    private Pipe(RandomAccessFile file) {
         this.file = file;
     }
 
