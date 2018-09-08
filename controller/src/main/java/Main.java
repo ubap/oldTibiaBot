@@ -1,12 +1,5 @@
-import controller.PipeMessage;
 import controller.Pipe;
-import controller.PipeResponse;
-import controller.constants.Consts854;
-import controller.game.BattleListEntry;
-import controller.game.BattleListReader;
-
-import java.util.Date;
-import java.util.List;
+import controller.game.GameWorld;
 
 public class Main {
 
@@ -15,18 +8,12 @@ public class Main {
         try {
 
             Pipe pipe = Pipe.forName("\\\\.\\pipe\\oldTibiaBot5556");
-            PipeResponse pipeResponse;
-            pipeResponse = pipe.send(PipeMessage.say("heh"));
-            pipeResponse = pipe.send(PipeMessage.readMemory(Consts854.ADDR_PLAYER_ID, 4));
-
-            System.out.println("a");
-            BattleListReader battleListReader = new BattleListReader(pipe);
+            GameWorld gameWorld = new GameWorld(pipe);
 
             while (true) {
-                long milis = System.nanoTime();
-                List<BattleListEntry> battleListEntryList = battleListReader.read();
-                System.out.println("battlelist read took: " + (System.nanoTime() - milis) + " ns");
-                battleListEntryList.size();
+                String playerName = gameWorld.getPlayerName();
+                Integer playerHp = gameWorld.getPlayerHp();
+                System.out.println(playerName + ", hp: " + playerHp);
             }
 
         } catch (Exception e) {

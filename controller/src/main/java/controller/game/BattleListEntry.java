@@ -1,12 +1,16 @@
 package controller.game;
 
+import lombok.Getter;
+
 import java.nio.ByteBuffer;
 
 import static controller.constants.Consts854.BATTLELIST_ENTRY_SIZE;
 
 public class BattleListEntry {
 
+    @Getter
     private Integer id;
+    @Getter
     private String name;
     private Integer positionX;
     private Integer positionY;
