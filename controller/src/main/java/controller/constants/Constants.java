@@ -16,7 +16,7 @@ public interface Constants {
     Integer addressPlayerCap();
 
     Integer addressTargetId();
-    
+
     Integer addressInventoryBegin();
 
     Integer maxContainerWindows();
