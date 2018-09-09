@@ -1,5 +1,6 @@
 package controller.game.world;
 
+import controller.game.Utils;
 import lombok.Getter;
 
 import java.nio.ByteBuffer;
@@ -45,13 +46,7 @@ public class Creature {
         // name
         byte[] nameBytes = new byte[32];
         byteBuffer.get(nameBytes);
-        int i;
-        for (i = 0; i < nameBytes.length; i++) {
-            if (nameBytes[i] == 0) {
-                break;
-            }
-        }
-        this.name = new String(nameBytes, 0, i);
+        this.name = Utils.stringFromNullTerminatedBytes(nameBytes);
         // positionX
         this.positionX = byteBuffer.getInt();
         this.positionY = byteBuffer.getInt();

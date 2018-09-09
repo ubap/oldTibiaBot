@@ -5,6 +5,7 @@ import controller.PipeMessage;
 import controller.PipeResponse;
 import controller.constants.Constants;
 import controller.game.world.Creature;
+import controller.game.world.Inventory;
 import lombok.Getter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -74,6 +75,12 @@ public class GameWorld {
                 PipeMessage.readMemory(this.constants.addressPlayerMp(), 4));
         return pipeResponse.getData().getInt();
     }
+
+    public Inventory getInventory() throws IOException {
+        return new Inventory(this);
+    }
+
+    // actions
 
     public void say(String text) throws IOException {
         this.pipe.send(PipeMessage.say(text));

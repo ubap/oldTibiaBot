@@ -9,6 +9,8 @@ public class Consts854 implements Constants {
     private static Integer PLAYER_MP = 0x00635EF0;
     private static Integer PLAYER_CAP = 0x00635EE0;
     private static Integer TARGET_ID = 0x00635EDC;
+    private static Integer INVETORY_BEGIN = 0x00642BC8;
+    private static Integer MAX_CONTAINER_WINDOWS = 0x10;
 
     @Override
     public Integer addressPlayerId() {
@@ -48,5 +50,15 @@ public class Consts854 implements Constants {
     @Override
     public Integer addressTargetId() {
         return TARGET_ID;
+    }
+
+    @Override
+    public Integer addressInventoryBegin() {
+        return INVETORY_BEGIN;
+    }
+
+    @Override
+    public Integer maxContainerWindows() {
+        return MAX_CONTAINER_WINDOWS;
     }
 }

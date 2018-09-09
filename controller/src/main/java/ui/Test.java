@@ -4,6 +4,7 @@ import controller.Pipe;
 import controller.constants.Consts854;
 import controller.game.world.Creature;
 import controller.game.GameWorld;
+import controller.game.world.Inventory;
 import javafx.application.Application;
 import javafx.concurrent.Task;
 import javafx.fxml.FXML;
@@ -210,9 +211,20 @@ public class Test extends Application {
         }
     }
 
+    @FXML
+    private void getInventory() {
+        try {
+            Inventory inventory = this.gameworld.getInventory();
+            inventory.toString();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+
     private void setupGameWorld() {
         try {
-            Pipe pipe = Pipe.forName("\\\\.\\pipe\\oldTibiaBot17096");
+            Pipe pipe = Pipe.forName("\\\\.\\pipe\\oldTibiaBot17572");
             gameworld = new GameWorld(pipe, new Consts854());
         } catch (Exception e) {
             e.printStackTrace();

@@ -21,6 +21,7 @@
                         <TextField fx:id="targetNameTextField" layoutX="14.0" layoutY="47.0" prefHeight="25.0" prefWidth="148.0" />
                         <Button layoutX="167.0" layoutY="47.0" mnemonicParsing="false" onAction="#attack" text="Attack" />
                         <Button fx:id="closestCreatureButton" layoutX="13.0" layoutY="79.0" mnemonicParsing="false" onAction="#getClosestCreature" text="Get Closest Creature" />
+                        <Button layoutX="14.0" layoutY="104.0" mnemonicParsing="false" onAction="#getInventory" text="Get Inventory" />
                      </children>
                   </AnchorPane>
             </content>
