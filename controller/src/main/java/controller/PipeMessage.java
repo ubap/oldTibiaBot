@@ -17,20 +17,42 @@ public class PipeMessage {
 
     public static PipeMessage say(String text) {
         PipeMessage pipeMessage = new PipeMessage();
-        pipeMessage.byteBuffer.putInt(3 + text.length());
-        pipeMessage.byteBuffer.put((byte) 0); // CMD_SAY opcode
-        pipeMessage.byteBuffer.put((byte) 1); // default channel
+        pipeMessage.byteBuffer.putInt(1); // size placeholder
+        pipeMessage.byteBuffer.putInt(1);   // opcode
+        pipeMessage.byteBuffer.putInt(0x00407310); // addr
+        pipeMessage.byteBuffer.putInt(2); // arg count
+
+        // mode
+        pipeMessage.byteBuffer.putInt(1); // arg type
+        pipeMessage.byteBuffer.putInt(1); // arg
+
+        // text
+        pipeMessage.byteBuffer.putInt(2); // arg type
+        pipeMessage.byteBuffer.putInt(text.length() + 1); // arg length
         pipeMessage.byteBuffer.put(text.getBytes());
-        pipeMessage.byteBuffer.put((byte) 0); // null terminate
+        pipeMessage.byteBuffer.put((byte) 0);
+
+        pipeMessage.byteBuffer.putInt(0,
+                pipeMessage.byteBuffer.position() - 4);
+
         pipeMessage.responseLength = 0;
         return pipeMessage;
     }
 
     public static PipeMessage attack(Integer creatureId) {
         PipeMessage pipeMessage = new PipeMessage();
-        pipeMessage.byteBuffer.putInt(5);
-        pipeMessage.byteBuffer.put((byte) 1);//  CMD_ATTACK
-        pipeMessage.byteBuffer.putInt(creatureId);
+        pipeMessage.byteBuffer.putInt(1); // size placeholder
+        pipeMessage.byteBuffer.putInt(1);   // opcode
+        pipeMessage.byteBuffer.putInt(0x00408E40); // addr
+        pipeMessage.byteBuffer.putInt(1); // arg count
+
+        // cid
+        pipeMessage.byteBuffer.putInt(1); // arg type
+        pipeMessage.byteBuffer.putInt(creatureId); // arg
+
+        pipeMessage.byteBuffer.putInt(0,
+                pipeMessage.byteBuffer.position() - 4);
+
         pipeMessage.responseLength = 0;
         return pipeMessage;
     }
@@ -44,8 +66,8 @@ public class PipeMessage {
 
     public static PipeMessage writeMemory(Integer address, Integer size, byte[] data) {
         PipeMessage pipeMessage = new PipeMessage();
-        pipeMessage.byteBuffer.putInt(9 + size);
-        pipeMessage.byteBuffer.put((byte) 200);//  CMD_WRITE_MEM
+        pipeMessage.byteBuffer.putInt(12 + size);
+        pipeMessage.byteBuffer.putInt(3);//  CMD_WRITE_MEM
         pipeMessage.byteBuffer.putInt(address);
         pipeMessage.byteBuffer.putInt(size);
         pipeMessage.byteBuffer.put(data, 0, size);
@@ -62,8 +84,8 @@ public class PipeMessage {
      */
     public static PipeMessage readMemory(Integer address, Integer size) {
         PipeMessage pipeMessage = new PipeMessage();
-        pipeMessage.byteBuffer.putInt(9);
-        pipeMessage.byteBuffer.put((byte) 100); // CMD_READ_MEM opcode
+        pipeMessage.byteBuffer.putInt(12);
+        pipeMessage.byteBuffer.putInt(2); // CMD_READ_MEM opcode
         pipeMessage.byteBuffer.putInt(address);
         pipeMessage.byteBuffer.putInt(size);
         pipeMessage.responseLength = size;
@@ -72,8 +94,25 @@ public class PipeMessage {
 
     public static PipeMessage call() {
         PipeMessage pipeMessage = new PipeMessage();
-        pipeMessage.byteBuffer.putInt(4);
-        pipeMessage.byteBuffer.put((byte) 2);
+        pipeMessage.byteBuffer.putInt(1); // size placeholder
+        pipeMessage.byteBuffer.putInt(1);   // opcode
+        pipeMessage.byteBuffer.putInt(0x00407310); // addr
+        pipeMessage.byteBuffer.putInt(2); // arg count
+
+        // mode
+        pipeMessage.byteBuffer.putInt(1); // arg type
+        pipeMessage.byteBuffer.putInt(1); // arg
+
+        // text
+        pipeMessage.byteBuffer.putInt(2); // arg type
+        String text = "hahah";
+        pipeMessage.byteBuffer.putInt(text.length() + 1); // arg length
+        pipeMessage.byteBuffer.put(text.getBytes());
+        pipeMessage.byteBuffer.put((byte) 0);
+
+        pipeMessage.byteBuffer.putInt(0,
+                pipeMessage.byteBuffer.position() - 4);
+
         pipeMessage.responseLength = 0;
         return pipeMessage;
     }

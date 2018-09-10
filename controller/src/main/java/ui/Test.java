@@ -237,7 +237,7 @@ public class Test extends Application {
 
     private void setupGameWorld() {
         try {
-            Pipe pipe = Pipe.forName("\\\\.\\pipe\\oldTibiaBot16928");
+            Pipe pipe = Pipe.forName("\\\\.\\pipe\\oldTibiaBot1844");
             gameworld = new GameWorld(pipe, new Consts854());
         } catch (Exception e) {
             e.printStackTrace();

@@ -1,6 +1,7 @@
 #include <Windows.h>
 #include <cstdio>
 #include <string>
+#include <vector>
 
 #include "PipeProtocolHandler.h"
 #include "PipeMessage.h"
@@ -101,35 +102,37 @@ void(*_tibia_attack)(unsigned int creatureid) = (void(*)(unsigned int))0x00408E4
 
 
 // command ids
-static const int CMD_SAY = 0;
-static const int CMD_ATTACK = 1;
-
-// read commands
-static const int CMD_READ_MEM = 100;
-static const int CMD_WSOCK_ADDR = 101;
-
-// set memory commands
-static const int CMD_WRITE_MEM = 200;
-
+static const int CMD_CALL = 1;
+static const int CMD_READ_MEM = 2;
+static const int CMD_WRITE_MEM = 3;
 
 FILE* f;
 
 
-bool ProcessSay(PipeProtocolHandler* handler, PipeMessage* message) {
-	unsigned char channel = message->nextByte();
-	const char* text = message->nextText();
-	switch (channel) {
-	case 1: case 2: case 3:
-		_tibia_say(channel, text);
-		return true;
-	}
-	return false;
-}
+void callWithDynamicArgs(void* addr, unsigned int argCount, void* args) {
+	_asm {
+		mov eax, argCount;
+		mov ecx, args
 
-bool ProcessAttack(PipeProtocolHandler* handler, PipeMessage* message) {
-	unsigned int cId = message->nextDWORD();
-	_tibia_attack(cId);
-	return true;
+		test eax, eax
+		jz no_args
+		add_argument_to_stack:
+			add eax, -1
+			lea ebx, [ecx + eax * 4]
+			push[ebx]
+
+			test eax, eax
+			jnz add_argument_to_stack;
+		no_args:
+			call addr;
+			mov eax, argCount;
+			test eax, eax
+			jz dont_restore_stack;
+
+			imul eax, 4;
+			add esp, eax;
+		dont_restore_stack:
+	}
 }
 
 bool ProcessReadMem(PipeProtocolHandler* handler, PipeMessage* message) {
@@ -154,20 +157,34 @@ bool ProcessDetermineWsockAddr(PipeProtocolHandler* handler) {
 }
 
 bool ProcessMessage(PipeProtocolHandler* handler, PipeMessage* message) {
-	unsigned char opCode = message->nextByte();
-	switch (opCode) {
-	case CMD_SAY:
-		return ProcessSay(handler, message);
-	case CMD_READ_MEM:
+	int opCode = message->nextDWORD();
+	if (opCode == CMD_CALL) {
+		DWORD address = message->nextDWORD();
+		int argCount = message->nextDWORD();
+		int argTypes[1024];
+		void* args[1024];
+		for (int i = 0; i < argCount; i++) {
+			argTypes[i] = message->nextDWORD(); // 1 - int, 2 - char*
+			switch (argTypes[i]) {
+			case 1: {
+				args[i] = (void*)message->nextDWORD(); break;
+			}
+			case 2: {
+				int length = message->nextDWORD();
+				args[i] = (void*)message->nextBytes(length);
+				break;
+			}
+			default:
+				return false;
+			}
+		}
+
+		callWithDynamicArgs((void*)address, argCount, args);
+
+	} else if (opCode == CMD_READ_MEM) {
 		return ProcessReadMem(handler, message);
-	case CMD_WSOCK_ADDR:
-		return ProcessDetermineWsockAddr(handler);
-	case CMD_ATTACK:
-		return ProcessAttack(handler, message);
-	case CMD_WRITE_MEM:
+	} else if (opCode == CMD_WRITE_MEM) {
 		return ProcessWriteMem(message);
-	default:
-		break;
 	}
 	return true;
 }
@@ -193,59 +210,13 @@ void PipeControl()
 			PipeMessage message = pipeHandler.readMessage();
 			if (message.error())
 				break;
+			// debug purposes
+			fwrite(message.getAllData(), message.getDataLength(), 1, f);
+			fflush(f);
 
 			ProcessMessage(&pipeHandler, &message);
 		}
 	}
-
-
-//start_listening:
-//	// Create a pipe to send data
-//	HANDLE pipe = CreateNamedPipe(
-//		pipeName, // name of the pipe
-//		PIPE_ACCESS_DUPLEX, // 2-way pipe
-//		PIPE_TYPE_MESSAGE, // send data as a byte stream
-//		1, // only allow 1 instance of this pipe
-//		0, // no outbound buffer
-//		0, // no inbound buffer
-//		0, // use default wait time
-//		NULL // use default security attributes
-//	);
-//
-//	if (pipe == NULL || pipe == INVALID_HANDLE_VALUE) {
-//		goto start_listening;
-//	}
-//
-//	// This call blocks until a client process connects to the pipe
-//	BOOL result = ConnectNamedPipe(pipe, NULL);
-//	if (!result) {
-//		CloseHandle(pipe); // close the pipe
-//		goto start_listening;
-//	}
-//
-//	char buffer[BUFLEN];
-//	while (1)
-//	{
-//		// The read operation will block until there is data to read
-//		DWORD numBytesRead = 0;
-//		result = ReadFile(
-//			pipe,
-//			buffer, // the data from the pipe will be put here
-//			BUFLEN * sizeof(char), // number of bytes allocated
-//			&numBytesRead, // this will store number of bytes actually read
-//			NULL // not using overlapped IO
-//		);
-//
-//		if (result) {
-//			buffer[numBytesRead] = 0;
-//			fwrite(buffer, 1, numBytesRead+1, f);
-//			ProcessCommand(buffer, pipe);
-//		}
-//		else {
-//			CloseHandle(pipe);
-//			goto start_listening;
-//		}
-//	}
 }
 
 BOOL APIENTRY DllMain(HMODULE hModule, DWORD ul_reason_for_call, LPVOID lpReserved)
