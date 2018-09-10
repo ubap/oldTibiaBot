@@ -25,7 +25,7 @@ public class Pipe {
         this.hits = 0;
     }
 
-    public synchronized PipeResponse send(PipeMessage pipeMessage) throws IOException {
+    public synchronized PipeResponse send(PipeMessageInterface pipeMessage) throws IOException {
         this.hits++;
         this.file.write(pipeMessage.array());
         int responseLength = pipeMessage.getResponseLength();

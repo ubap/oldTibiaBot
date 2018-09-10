@@ -4,7 +4,7 @@ import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.util.Arrays;
 
-public class PipeMessage {
+public class PipeMessage implements PipeMessageInterface {
 
     private ByteBuffer byteBuffer;
     // defines if this message should have answer, and what size, in bytes
@@ -117,10 +117,12 @@ public class PipeMessage {
         return pipeMessage;
     }
 
+    @Override
     public byte[] array() {
         return Arrays.copyOf(this.byteBuffer.array(), this.byteBuffer.getInt(0) + 4);
     }
 
+    @Override
     public int getResponseLength() {
         return responseLength;
     }
