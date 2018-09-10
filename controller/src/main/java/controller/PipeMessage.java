@@ -70,6 +70,14 @@ public class PipeMessage {
         return pipeMessage;
     }
 
+    public static PipeMessage call() {
+        PipeMessage pipeMessage = new PipeMessage();
+        pipeMessage.byteBuffer.putInt(4);
+        pipeMessage.byteBuffer.put((byte) 2);
+        pipeMessage.responseLength = 0;
+        return pipeMessage;
+    }
+
     public byte[] array() {
         return Arrays.copyOf(this.byteBuffer.array(), this.byteBuffer.getInt(0) + 4);
     }

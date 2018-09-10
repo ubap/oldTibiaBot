@@ -1,6 +1,7 @@
 package ui;
 
 import controller.Pipe;
+import controller.PipeMessage;
 import controller.constants.Consts854;
 import controller.game.world.Creature;
 import controller.game.GameWorld;
@@ -22,6 +23,7 @@ public class Test extends Application {
 
     @FXML private TextField sayTextField;
     @FXML private TextField targetNameTextField;
+    @FXML private TextField targetIdTextField;
     @FXML private Label hpLabel;
     @FXML private Label mpLabel;
     @FXML private Label nameLabel;
@@ -187,8 +189,8 @@ public class Test extends Application {
     @FXML
     private void attack() {
         try {
-            String targetName = this.targetNameTextField.getText();
-            Creature creature = this.gameworld.getBattleList().getCreatureByName(targetName);
+            String targetId = this.targetIdTextField.getText();
+            Creature creature = this.gameworld.getBattleList().getCreatureById(Integer.valueOf(targetId));
             if (creature != null) {
                 this.gameworld.attack(creature);
             }
@@ -205,6 +207,7 @@ public class Test extends Application {
                     this.gameworld.getBattleList().getClosestCreature(self);
             if (closestCreature != null) {
                 this.targetNameTextField.setText(closestCreature.getName());
+                this.targetIdTextField.setText(closestCreature.getId().toString());
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -221,10 +224,20 @@ public class Test extends Application {
         }
     }
 
+    @FXML
+    private void call() {
+        try {
+            PipeMessage pipeMessage = PipeMessage.call();
+            this.gameworld.getPipe().send(pipeMessage);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
 
     private void setupGameWorld() {
         try {
-            Pipe pipe = Pipe.forName("\\\\.\\pipe\\oldTibiaBot17572");
+            Pipe pipe = Pipe.forName("\\\\.\\pipe\\oldTibiaBot16928");
             gameworld = new GameWorld(pipe, new Consts854());
         } catch (Exception e) {
             e.printStackTrace();

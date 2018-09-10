@@ -18,10 +18,12 @@
                      <children>
                         <TextField fx:id="sayTextField" layoutX="14.0" layoutY="14.0" />
                         <Button fx:id="sayBtn" layoutX="169.0" layoutY="14.0" mnemonicParsing="false" onAction="#say" prefHeight="25.0" prefWidth="48.0" text="Say" />
-                        <TextField fx:id="targetNameTextField" layoutX="14.0" layoutY="47.0" prefHeight="25.0" prefWidth="148.0" />
-                        <Button layoutX="167.0" layoutY="47.0" mnemonicParsing="false" onAction="#attack" text="Attack" />
-                        <Button fx:id="closestCreatureButton" layoutX="13.0" layoutY="79.0" mnemonicParsing="false" onAction="#getClosestCreature" text="Get Closest Creature" />
-                        <Button layoutX="14.0" layoutY="104.0" mnemonicParsing="false" onAction="#getInventory" text="Get Inventory" />
+                        <TextField fx:id="targetNameTextField" disable="true" layoutX="14.0" layoutY="47.0" prefHeight="25.0" prefWidth="148.0" />
+                        <Button layoutX="169.0" layoutY="73.0" mnemonicParsing="false" onAction="#attack" text="Attack" />
+                        <Button fx:id="closestCreatureButton" layoutX="14.0" layoutY="105.0" mnemonicParsing="false" onAction="#getClosestCreature" text="Get Closest Creature" />
+                        <Button layoutX="14.0" layoutY="130.0" mnemonicParsing="false" onAction="#getInventory" text="Get Inventory" />
+                        <Button fx:id="call" layoutX="14.0" layoutY="155.0" mnemonicParsing="false" text="Call" />
+                        <TextField fx:id="targetIdTextField" layoutX="14.0" layoutY="73.0" />
                      </children>
                   </AnchorPane>
             </content>
