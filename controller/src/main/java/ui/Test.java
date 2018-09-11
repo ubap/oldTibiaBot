@@ -4,7 +4,7 @@ import remote.Pipe;
 import controller.constants.Consts854;
 import controller.game.world.Creature;
 import controller.game.Game;
-import controller.game.world.Inventory;
+import controller.game.Inventory;
 import javafx.application.Application;
 import javafx.concurrent.Task;
 import javafx.fxml.FXML;

@@ -1,4 +1,4 @@
-package controller.game.world;
+package controller.game;
 
 import lombok.Getter;
 

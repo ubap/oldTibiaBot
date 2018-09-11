@@ -1,6 +1,5 @@
-package controller.game.world;
+package controller.game;
 
-import controller.game.Game;
 import remote.PipeMessage;
 import remote.PipeResponse;
 

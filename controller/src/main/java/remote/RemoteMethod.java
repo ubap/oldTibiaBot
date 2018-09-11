@@ -11,10 +11,10 @@ public class RemoteMethod implements PipeMessage {
     private ByteBuffer byteBuffer;
 
     public RemoteMethod(Builder payloadCallBuilder) {
-        List<Argument> argumentList = payloadCallBuilder.argumentList;
+        List<RemoteMethodArgument> remoteMethodArgumentList = payloadCallBuilder.remoteMethodArgumentList;
         int sizeTotal = 16; // 4 byte header, 4 byte opcode, 4 byte address, 4 byte argCount
-        for (Argument argument : argumentList) {
-            sizeTotal += argument.getSize();
+        for (RemoteMethodArgument remoteMethodArgument : remoteMethodArgumentList) {
+            sizeTotal += remoteMethodArgument.getSize();
         }
         this.byteBuffer = ByteBuffer.allocate(sizeTotal);
         this.byteBuffer.order(ByteOrder.LITTLE_ENDIAN);
@@ -22,10 +22,10 @@ public class RemoteMethod implements PipeMessage {
         this.byteBuffer.putInt(1);   // opcode
         this.byteBuffer.putInt(payloadCallBuilder.address);
 
-        this.byteBuffer.putInt(argumentList.size());
+        this.byteBuffer.putInt(remoteMethodArgumentList.size());
 
-        for (Argument argument : argumentList) {
-            argument.writeBytes(this.byteBuffer);
+        for (RemoteMethodArgument remoteMethodArgument : remoteMethodArgumentList) {
+            remoteMethodArgument.writeBytes(this.byteBuffer);
         }
     }
 
@@ -43,10 +43,10 @@ public class RemoteMethod implements PipeMessage {
 
     public static class Builder {
         private Integer address;
-        private List<Argument> argumentList;
+        private List<RemoteMethodArgument> remoteMethodArgumentList;
 
         public Builder() {
-            Builder.this.argumentList = new ArrayList<>();
+            Builder.this.remoteMethodArgumentList = new ArrayList<>();
         }
 
         public Builder setMethodAddress(Integer address) {
@@ -54,8 +54,8 @@ public class RemoteMethod implements PipeMessage {
             return Builder.this;
         }
 
-        public Builder addArgument(Argument argument) {
-            this.argumentList.add(argument);
+        public Builder addArgument(RemoteMethodArgument remoteMethodArgument) {
+            this.remoteMethodArgumentList.add(remoteMethodArgument);
             return Builder.this;
         }
 

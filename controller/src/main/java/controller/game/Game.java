@@ -3,7 +3,6 @@ package controller.game;
 import remote.*;
 import controller.constants.Constants;
 import controller.game.world.Creature;
-import controller.game.world.Inventory;
 import lombok.Getter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

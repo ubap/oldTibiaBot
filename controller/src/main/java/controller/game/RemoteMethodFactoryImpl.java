@@ -1,6 +1,6 @@
 package controller.game;
 
-import remote.Argument;
+import remote.RemoteMethodArgument;
 import controller.constants.Constants;
 import remote.RemoteMethod;
 import remote.PipeMessage;
@@ -23,8 +23,8 @@ public class RemoteMethodFactoryImpl implements RemoteMethodFactory {
         RemoteMethod.Builder payloadCallBuilder = new RemoteMethod.Builder();
         return payloadCallBuilder
                 .setMethodAddress(constants.getAddressMethodSay())
-                .addArgument(Argument.int32(1))
-                .addArgument(Argument.text(text))
+                .addArgument(RemoteMethodArgument.int32(1))
+                .addArgument(RemoteMethodArgument.text(text))
                 .build();
     }
 
@@ -33,7 +33,7 @@ public class RemoteMethodFactoryImpl implements RemoteMethodFactory {
         RemoteMethod.Builder payloadCallBuilder = new RemoteMethod.Builder();
         return payloadCallBuilder
                 .setMethodAddress(constants.getAddressMethodAttack())
-                .addArgument(Argument.int32(creatureId))
+                .addArgument(RemoteMethodArgument.int32(creatureId))
                 .build();
     }
 }

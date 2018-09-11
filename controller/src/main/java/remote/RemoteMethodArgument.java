@@ -4,7 +4,7 @@ import lombok.Getter;
 
 import java.nio.ByteBuffer;
 
-public class Argument {
+public class RemoteMethodArgument {
     private static Integer INT32 = 1;
     private static Integer BYTEARRAY = 2;
 
@@ -15,23 +15,23 @@ public class Argument {
     @Getter
     private Integer size;
 
-    private Argument() { }
+    private RemoteMethodArgument() { }
 
-    public static Argument int32(Integer value) {
-        Argument argument = new Argument();
-        argument.type = INT32;
-        argument.value = value;
-        argument.size = 8;
-        return argument;
+    public static RemoteMethodArgument int32(Integer value) {
+        RemoteMethodArgument remoteMethodArgument = new RemoteMethodArgument();
+        remoteMethodArgument.type = INT32;
+        remoteMethodArgument.value = value;
+        remoteMethodArgument.size = 8;
+        return remoteMethodArgument;
     }
 
-    public static Argument text(String text) {
-        Argument argument = new Argument();
-        argument.type = BYTEARRAY;
-        argument.value = text;
+    public static RemoteMethodArgument text(String text) {
+        RemoteMethodArgument remoteMethodArgument = new RemoteMethodArgument();
+        remoteMethodArgument.type = BYTEARRAY;
+        remoteMethodArgument.value = text;
         // type, strlen, text, nullterminate
-        argument.size = 4 + 4 + text.length() + 1;
-        return argument;
+        remoteMethodArgument.size = 4 + 4 + text.length() + 1;
+        return remoteMethodArgument;
     }
 
     public void writeBytes(ByteBuffer byteBuffer) {
