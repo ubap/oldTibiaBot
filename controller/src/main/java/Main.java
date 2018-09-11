@@ -1,7 +1,7 @@
-import controller.game.RemoteMemoryFactoryImpl;
-import remote.Pipe;
+import controller.constants.Consts854;
+import controller.game.Game;
 import os.ProcessListUtil;
-import remote.RemoteMemoryFactory;
+import remote.Pipe;
 
 import java.util.List;
 
@@ -18,25 +18,18 @@ public class Main {
             } else {
                 return;
             }
+            Game game = new Game(pipe, new Consts854());
 
             Long timeStart = System.nanoTime();
 
-            for (int i = 0; i < 1000; i++) {
-
-                Thread.sleep(2500);
+            for (int i = 0; i < 10000; i++) {
+                String playerName = game.getSelf().getName();
             }
 
             timeStart = System.nanoTime() - timeStart;
 
-            System.out.println(timeStart / 1000000. + "ms");
+            System.out.println("Avg time: " + (timeStart / 1000000.) / 10000. + "ms");
 
-//            GameWorld gameWorld = new GameWorld(pipe, new Consts854());
-//
-//            while (true) {
-//                String playerName = gameWorld.getSelf().getName();
-//                Integer playerHp = gameWorld.getPlayerHp();
-//                System.out.println(playerName + ", hp: " + playerHp);
-//            }
 
         } catch (Exception e) {
             e.printStackTrace();

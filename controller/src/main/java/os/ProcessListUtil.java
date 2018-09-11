@@ -19,17 +19,18 @@ public class ProcessListUtil {
         List<String> linesList = new ArrayList<>();
         BufferedReader input = null;
         try {
-            Process p = Runtime.getRuntime().exec(String.format("tasklist /FI \"IMAGENAME  eq %s\"", processName));
+            Process p = Runtime.getRuntime().exec(
+                    String.format("tasklist /FI \"IMAGENAME  eq %s\"", processName));
             input = new BufferedReader(new InputStreamReader(p.getInputStream()));
             {
-                int nLine = 0;
+                int lineNumber = 0;
                 String line;
                 while ((line = input.readLine()) != null) {
                     if (line.isEmpty()) {
                         continue;
                     }
-                    nLine++;
-                    if (nLine > 2) {
+                    lineNumber++;
+                    if (lineNumber > 2) {
                         linesList.add(line);
                     }
                 }

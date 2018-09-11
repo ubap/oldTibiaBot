@@ -3,7 +3,7 @@ package ui;
 import remote.Pipe;
 import controller.constants.Consts854;
 import controller.game.world.Creature;
-import controller.game.GameWorld;
+import controller.game.Game;
 import controller.game.world.Inventory;
 import javafx.application.Application;
 import javafx.concurrent.Task;
@@ -34,7 +34,7 @@ public class Test extends Application {
     @FXML private Label posZLabel;
     @FXML private Label hitsLabel;
 
-    private GameWorld gameworld;
+    private Game gameworld;
 
     @Override
     public void start(Stage primaryStage) throws Exception {
@@ -192,7 +192,8 @@ public class Test extends Application {
     private void attack() {
         try {
             String targetId = this.targetIdTextField.getText();
-            Creature creature = this.gameworld.getBattleList().getCreatureById(Integer.valueOf(targetId));
+            Creature creature = this.gameworld.getBattleList()
+                    .getCreatureById(Integer.valueOf(targetId));
             if (creature != null) {
                 this.gameworld.attack(creature);
             }
@@ -238,7 +239,7 @@ public class Test extends Application {
             List<Integer> processList = ProcessListUtil.getProcessList("Kasteria.exe");
             if (processList.size() > 0) {
                 Pipe pipe = Pipe.forName("\\\\.\\pipe\\oldTibiaBot" + processList.get(0));
-                gameworld = new GameWorld(pipe, new Consts854());
+                gameworld = new Game(pipe, new Consts854());
             }
         } catch (Exception e) {
             e.printStackTrace();

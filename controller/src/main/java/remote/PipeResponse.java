@@ -10,6 +10,7 @@ public class PipeResponse {
     private ByteBuffer data;
 
     private static PipeResponse RESPONSE_NO_DATA;
+
     static {
         RESPONSE_NO_DATA = new PipeResponse();
         RESPONSE_NO_DATA.error = false;

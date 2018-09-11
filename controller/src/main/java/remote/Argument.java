@@ -1,13 +1,10 @@
-package controller;
+package remote;
 
 import lombok.Getter;
 
 import java.nio.ByteBuffer;
 
 public class Argument {
-
-
-
     private static Integer INT32 = 1;
     private static Integer BYTEARRAY = 2;
 
@@ -27,14 +24,6 @@ public class Argument {
         argument.size = 8;
         return argument;
     }
-
-//    public static Argument byteArray(byte[] bytes) {
-//        Argument argument = new Argument();
-//        argument.type = BYTEARRAY;
-//        argument.value = Arrays.copyOf(bytes, bytes.length);
-//        argument.size
-//        return argument;
-//    }
 
     public static Argument text(String text) {
         Argument argument = new Argument();

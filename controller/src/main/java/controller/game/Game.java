@@ -13,8 +13,8 @@ import java.io.IOException;
 /**
  * Acts as a *Context* class
  */
-public class GameWorld {
-    private static final Logger log = LoggerFactory.getLogger(GameWorld.class);
+public class Game {
+    private static final Logger log = LoggerFactory.getLogger(Game.class);
 
     @Getter
     private Pipe pipe;
@@ -27,7 +27,7 @@ public class GameWorld {
     private RemoteMemoryFactory remoteMemoryFactory;
 
 
-    public GameWorld(Pipe pipe, Constants constants) {
+    public Game(Pipe pipe, Constants constants) {
         this.pipe = pipe;
         this.constants = constants;
         this.remoteMethodFactory = new RemoteMethodFactoryImpl(this.constants);
@@ -76,13 +76,14 @@ public class GameWorld {
 
     public Integer getPlayerHp() throws IOException {
         PipeResponse pipeResponse
-                = this.remoteMemoryFactory.readInt(this.constants.getAddressPlayerHp()).execute(this.pipe);
+                = this.remoteMemoryFactory.readInt(
+                        this.constants.getAddressPlayerHp()).execute(this.pipe);
         return pipeResponse.getData().getInt();
     }
 
     public Integer getPlayerMp() throws IOException {
-        PipeResponse pipeResponse
-                = this.remoteMemoryFactory.readInt(this.constants.getAddressPlayerMp()).execute(this.pipe);
+        PipeResponse pipeResponse = this.remoteMemoryFactory.readInt(
+                        this.constants.getAddressPlayerMp()).execute(this.pipe);
         return pipeResponse.getData().getInt();
     }
 
@@ -104,7 +105,8 @@ public class GameWorld {
         log.info("Attack: {}", creature.toString());
         // execute a packet to game world
         this.remoteMethodFactory.attack(creature.getId()).execute(this.pipe);
-        this.remoteMemoryFactory.writeInt(this.constants.getAddressTargetId(), creature.getId()).execute(this.pipe);
+        this.remoteMemoryFactory.writeInt(
+                this.constants.getAddressTargetId(), creature.getId()).execute(this.pipe);
 
     }
 

@@ -17,16 +17,16 @@ public class BattleList {
 
     private BattleList() { }
 
-    public static BattleList allVisible(GameWorld gameWorld) throws IOException {
+    public static BattleList allVisible(Game game) throws IOException {
 
-        PipeMessage readMemoryMessage = gameWorld.getRemoteMemoryFactory().readBytes(
-                gameWorld.getConstants().getAddressBattleListStart(),
-                gameWorld.getConstants().getBattleListMaxEntries()
-                        * gameWorld.getConstants().getBattleListEntrySize());
-        PipeResponse pipeResponse = readMemoryMessage.execute(gameWorld.getPipe());
+        PipeMessage readMemoryMessage = game.getRemoteMemoryFactory().readBytes(
+                game.getConstants().getAddressBattleListStart(),
+                game.getConstants().getBattleListMaxEntries()
+                        * game.getConstants().getBattleListEntrySize());
+        PipeResponse pipeResponse = readMemoryMessage.execute(game.getPipe());
         BattleList battleList = new BattleList();
-        battleList.creatureList = new ArrayList<>(gameWorld.getConstants().getBattleListMaxEntries());
-        for (int i = 0; i < gameWorld.getConstants().getBattleListMaxEntries(); i++) {
+        battleList.creatureList = new ArrayList<>(game.getConstants().getBattleListMaxEntries());
+        for (int i = 0; i < game.getConstants().getBattleListMaxEntries(); i++) {
             Creature creature = new Creature(pipeResponse.getData());
             // this basically means this creature is VALID
             if (creature.isVisible()) {
@@ -36,10 +36,10 @@ public class BattleList {
         return battleList;
     }
 
-    public static BattleList allVisibleWithoutGiven(GameWorld gameWorld, Integer creatureId)
+    public static BattleList allVisibleWithoutGiven(Game game, Integer creatureId)
             throws IOException {
 
-        BattleList battleList = BattleList.allVisible(gameWorld);
+        BattleList battleList = BattleList.allVisible(game);
         Creature creatureToRemove = null;
         for (Creature creature : battleList.creatureList) {
             if (creature.getId().equals(creatureId)) {

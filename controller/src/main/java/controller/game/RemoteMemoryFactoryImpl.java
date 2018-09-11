@@ -11,7 +11,8 @@ public class RemoteMemoryFactoryImpl implements RemoteMemoryFactory {
 
     @Override
     public PipeMessage writeBytes(Integer address, Integer size, byte[] data) {
-        ByteBuffer byteBuffer = ByteBuffer.allocate(16 + size); // 4 byte size, 4 byte opcode, 4 byte address, 4 byte size
+        // 4 byte size, 4 byte opcode, 4 byte address, 4 byte size
+        ByteBuffer byteBuffer = ByteBuffer.allocate(16 + size);
         byteBuffer.order(ByteOrder.LITTLE_ENDIAN);
 
         byteBuffer.putInt(12 + size);
@@ -30,7 +31,8 @@ public class RemoteMemoryFactoryImpl implements RemoteMemoryFactory {
      */
     @Override
     public PipeMessage writeInt(Integer address, Integer data) {
-        ByteBuffer byteBuffer = ByteBuffer.allocate(20); // 4 byte size, 4 byte opcode, 4 byte address, 4 byte size
+        // 4 byte size, 4 byte opcode, 4 byte address, 4 byte size
+        ByteBuffer byteBuffer = ByteBuffer.allocate(20);
         byteBuffer.order(ByteOrder.LITTLE_ENDIAN);
 
         byteBuffer.putInt(16);
@@ -44,7 +46,8 @@ public class RemoteMemoryFactoryImpl implements RemoteMemoryFactory {
 
     @Override
     public PipeMessage readBytes(Integer address, Integer size) {
-        ByteBuffer byteBuffer = ByteBuffer.allocate(16); // 4 byte size, 4 byte opcode, 4 byte address, 4 byte size
+        // 4 byte size, 4 byte opcode, 4 byte address, 4 byte size
+        ByteBuffer byteBuffer = ByteBuffer.allocate(16);
         byteBuffer.order(ByteOrder.LITTLE_ENDIAN);
         byteBuffer.putInt(12);
         byteBuffer.putInt(2); // CMD_READ_MEM opcode

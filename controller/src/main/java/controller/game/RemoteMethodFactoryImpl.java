@@ -1,6 +1,6 @@
 package controller.game;
 
-import controller.Argument;
+import remote.Argument;
 import controller.constants.Constants;
 import remote.RemoteMethod;
 import remote.PipeMessage;
