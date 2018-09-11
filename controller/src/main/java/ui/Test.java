@@ -15,6 +15,9 @@ import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
+import os.ProcessListUtil;
+
+import java.util.List;
 
 /**
  * Test module for all the features so manual tests can be easier performed.
@@ -237,8 +240,11 @@ public class Test extends Application {
 
     private void setupGameWorld() {
         try {
-            Pipe pipe = Pipe.forName("\\\\.\\pipe\\oldTibiaBot1844");
-            gameworld = new GameWorld(pipe, new Consts854());
+            List<Integer> processList = ProcessListUtil.getProcessList("Kasteria.exe");
+            if (processList.size() > 0) {
+                Pipe pipe = Pipe.forName("\\\\.\\pipe\\oldTibiaBot" + processList.get(0));
+                gameworld = new GameWorld(pipe, new Consts854());
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }

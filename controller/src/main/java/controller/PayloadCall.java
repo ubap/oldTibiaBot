@@ -5,7 +5,6 @@ import java.nio.ByteBuffer;
 public class PayloadCall implements PipeMessageInterface {
 
     private ByteBuffer byteBuffer;
-    private
 
     public PayloadCall(ByteBuffer byteBuffer) {
 
