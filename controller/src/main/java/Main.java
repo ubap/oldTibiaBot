@@ -1,7 +1,9 @@
-import controller.Pipe;
-import controller.PipeMessage;
-import controller.constants.Consts854;
-import controller.game.GameWorld;
+import controller.game.RemoteMemoryFactoryImpl;
+import remote.Pipe;
+import os.ProcessListUtil;
+import remote.RemoteMemoryFactory;
+
+import java.util.List;
 
 public class Main {
 
@@ -9,10 +11,24 @@ public class Main {
 
         try {
 
-            Pipe pipe = Pipe.forName("\\\\.\\pipe\\oldTibiaBot15792");
+            List<Integer> processList = ProcessListUtil.getProcessList("Kasteria.exe");
+            Pipe pipe;
+            if (processList.size() > 0) {
+                pipe = Pipe.forName("\\\\.\\pipe\\oldTibiaBot" + processList.get(0));
+            } else {
+                return;
+            }
 
-            PipeMessage pipeMessage = PipeMessage.call();
-            pipe.send(pipeMessage);
+            Long timeStart = System.nanoTime();
+
+            for (int i = 0; i < 1000; i++) {
+
+                Thread.sleep(2500);
+            }
+
+            timeStart = System.nanoTime() - timeStart;
+
+            System.out.println(timeStart / 1000000. + "ms");
 
 //            GameWorld gameWorld = new GameWorld(pipe, new Consts854());
 //

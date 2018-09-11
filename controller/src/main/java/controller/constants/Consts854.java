@@ -12,53 +12,67 @@ public class Consts854 implements Constants {
     private static Integer INVETORY_BEGIN = 0x00642BC8;
     private static Integer MAX_CONTAINER_WINDOWS = 0x10;
 
+    // methods
+    private static Integer METHOD_SAY = 0x00407310;
+    private static Integer METHOD_ATTACK = 0x00408E40;
+
     @Override
-    public Integer addressPlayerId() {
+    public Integer getAddressPlayerId() {
         return ADDR_PLAYER_ID;
     }
 
     @Override
-    public Integer addressBattleListStart() {
+    public Integer getAddressBattleListStart() {
         return ADDR_BATTLELIST_START;
     }
 
     @Override
-    public Integer battleListMaxEntries() {
+    public Integer getBattleListMaxEntries() {
         return BATTLELIST_MAX_ENTRIES;
     }
 
     @Override
-    public Integer battleListEntrySize() {
+    public Integer getBattleListEntrySize() {
         return BATTLELIST_ENTRY_SIZE;
     }
 
     @Override
-    public Integer addressPlayerHp() {
+    public Integer getAddressPlayerHp() {
         return PLAYER_HP;
     }
 
     @Override
-    public Integer addressPlayerMp() {
+    public Integer getAddressPlayerMp() {
         return PLAYER_MP;
     }
 
     @Override
-    public Integer addressPlayerCap() {
+    public Integer getAddressPlayerCap() {
         return PLAYER_CAP;
     }
 
     @Override
-    public Integer addressTargetId() {
+    public Integer getAddressTargetId() {
         return TARGET_ID;
     }
 
     @Override
-    public Integer addressInventoryBegin() {
+    public Integer getAddressInventoryBegin() {
         return INVETORY_BEGIN;
     }
 
     @Override
-    public Integer maxContainerWindows() {
+    public Integer getMaxContainerWindows() {
         return MAX_CONTAINER_WINDOWS;
+    }
+
+    @Override
+    public Integer getAddressMethodSay() {
+        return METHOD_SAY;
+    }
+
+    @Override
+    public Integer getAddressMethodAttack() {
+        return METHOD_ATTACK;
     }
 }

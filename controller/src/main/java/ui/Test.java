@@ -1,7 +1,6 @@
 package ui;
 
-import controller.Pipe;
-import controller.PipeMessage;
+import remote.Pipe;
 import controller.constants.Consts854;
 import controller.game.world.Creature;
 import controller.game.GameWorld;
@@ -229,12 +228,8 @@ public class Test extends Application {
 
     @FXML
     private void call() {
-        try {
-            PipeMessage pipeMessage = PipeMessage.call();
-            this.gameworld.getPipe().send(pipeMessage);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+
+
     }
 
 

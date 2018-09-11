@@ -1,7 +1,7 @@
 package controller.game;
 
-import controller.PipeMessage;
-import controller.PipeResponse;
+import remote.PipeMessage;
+import remote.PipeResponse;
 import controller.game.world.Creature;
 
 import java.io.IOException;
@@ -19,14 +19,14 @@ public class BattleList {
 
     public static BattleList allVisible(GameWorld gameWorld) throws IOException {
 
-        PipeMessage readMemoryMessage = PipeMessage.readMemory(
-                gameWorld.getConstants().addressBattleListStart(),
-                gameWorld.getConstants().battleListMaxEntries()
-                        * gameWorld.getConstants().battleListEntrySize());
-        PipeResponse pipeResponse = gameWorld.getPipe().send(readMemoryMessage);
+        PipeMessage readMemoryMessage = gameWorld.getRemoteMemoryFactory().readBytes(
+                gameWorld.getConstants().getAddressBattleListStart(),
+                gameWorld.getConstants().getBattleListMaxEntries()
+                        * gameWorld.getConstants().getBattleListEntrySize());
+        PipeResponse pipeResponse = readMemoryMessage.execute(gameWorld.getPipe());
         BattleList battleList = new BattleList();
-        battleList.creatureList = new ArrayList<>(gameWorld.getConstants().battleListMaxEntries());
-        for (int i = 0; i < gameWorld.getConstants().battleListMaxEntries(); i++) {
+        battleList.creatureList = new ArrayList<>(gameWorld.getConstants().getBattleListMaxEntries());
+        for (int i = 0; i < gameWorld.getConstants().getBattleListMaxEntries(); i++) {
             Creature creature = new Creature(pipeResponse.getData());
             // this basically means this creature is VALID
             if (creature.isVisible()) {
