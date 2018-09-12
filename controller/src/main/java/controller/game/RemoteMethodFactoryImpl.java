@@ -1,5 +1,6 @@
 package controller.game;
 
+import controller.game.world.Creature;
 import remote.RemoteMethodArgument;
 import controller.constants.Constants;
 import remote.RemoteMethod;
@@ -10,7 +11,6 @@ import remote.RemoteMethodFactory;
  * Expose GAME methods.
  */
 public class RemoteMethodFactoryImpl implements RemoteMethodFactory {
-    // todo extract constants
 
     private Constants constants;
 
@@ -66,6 +66,20 @@ public class RemoteMethodFactoryImpl implements RemoteMethodFactory {
         RemoteMethod.Builder payloadCallBuilder = new RemoteMethod.Builder();
         return payloadCallBuilder
                 .setMethodAddress(constants.getAddressTurnEast())
+                .build();
+    }
+
+    @Override
+    public PipeMessage useItemOnCreature(int itemId, Creature creature) {
+        RemoteMethod.Builder payloadCallBuilder = new RemoteMethod.Builder();
+        return payloadCallBuilder
+                .setMethodAddress(constants.getAddressUse())
+                .addArgument(RemoteMethodArgument.int32(0xFFFF))
+                .addArgument(RemoteMethodArgument.int32(0))
+                .addArgument(RemoteMethodArgument.int32(0))
+                .addArgument(RemoteMethodArgument.int32(itemId))
+                .addArgument(RemoteMethodArgument.int32(0))
+                .addArgument(RemoteMethodArgument.int32(creature.getId()))
                 .build();
     }
 }

@@ -33,5 +33,7 @@ public interface Constants {
     Integer getAddressTurnSouth();
 
     Integer getAddressTurnEast();
+
+    Integer getAddressUse();
     // endregion
 }

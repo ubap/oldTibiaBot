@@ -19,6 +19,7 @@ public class Consts854 implements Constants {
     private static Integer METHOD_TURN_WEST = 0x004050A0;
     private static Integer METHOD_TURN_SOUTH = 0x00404f00;
     private static Integer METHOD_TURN_EAST = 0x00404d60;
+    private static Integer METHOD_USE = 0x00406670;
 
     @Override
     public Integer getAddressPlayerId() {
@@ -98,5 +99,10 @@ public class Consts854 implements Constants {
     @Override
     public Integer getAddressTurnEast() {
         return METHOD_TURN_EAST;
+    }
+
+    @Override
+    public Integer getAddressUse() {
+        return METHOD_USE;
     }
 }

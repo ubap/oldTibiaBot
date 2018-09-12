@@ -1,5 +1,6 @@
 package controller.game;
 
+import lombok.Getter;
 import remote.PipeMessage;
 import remote.PipeResponse;
 
@@ -9,6 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Inventory {
+    @Getter
     private Equipment equipment;
     private List<Container> containerList;
 

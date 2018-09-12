@@ -234,6 +234,13 @@ public class Test extends Application {
         try {
             RemoteMethodFactory remoteMethodFactory = new RemoteMethodFactoryImpl(this.gameworld.getConstants());
             remoteMethodFactory.turnNorth().execute(this.gameworld.getPipe());
+
+
+            Inventory inventory = this.gameworld.getInventory();
+            remoteMethodFactory
+                    .useItemOnCreature(inventory.getEquipment().getArrow().getId(), this.gameworld.getSelf())
+                    .execute(this.gameworld.getPipe());
+
         } catch (Exception e) {
             e.printStackTrace();
         }

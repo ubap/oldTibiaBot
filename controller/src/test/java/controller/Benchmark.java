@@ -19,7 +19,7 @@ public class Benchmark {
 
         try {
 
-            List<Integer> processList = ProcessListUtil.getProcessList("Kasteria.exe");
+            List<Integer> processList = ProcessListUtil.getProcessList("Tibia.exe");
             Pipe pipe;
             if (processList.size() > 0) {
                 pipe = Pipe.forName("\\\\.\\pipe\\oldTibiaBot" + processList.get(0));
@@ -27,6 +27,8 @@ public class Benchmark {
                 return;
             }
             Game game = new Game(pipe, new Consts854());
+
+
 
             executeBenchmarks(game, Arrays.asList(1, 2, 4, 8, 16, 32, 64, 10000));
 

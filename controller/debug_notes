@@ -1,0 +1,25 @@
+Third on the stack and then go to start of the method (Usually followed by INT3 bytecodes)
+
+0x00404BC0 -- turn north
+0x00404d60  -- turn east
+0x00404f00 -- south
+0x004050A0 -- west
+
+
+0x00406670 - use item
+-- use hotkey on self
+0019EC1C   0000FFFF
+0019EC20   00000000
+0019EC24   00000000
+0019EC28   00000CC6 -- itemid
+0019EC2C   00000000
+0019EC30   1000125B -- creatureid
+
+-- use from eq on battlelist creature
+0019E6D8   0000FFFF
+0019E6DC   00000006
+0019E6E0   00000000
+0019E6E4   00000CC6
+0019E6E8   00000000
+0019E6EC   800003F1
+

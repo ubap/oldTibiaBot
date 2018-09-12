@@ -1,18 +1,30 @@
 package controller.game;
 
+import lombok.Getter;
+
 import java.nio.ByteBuffer;
 
 public class Equipment {
 
+    @Getter
     private ItemEntry head;
+    @Getter
     private ItemEntry necklace;
+    @Getter
     private ItemEntry backpack;
+    @Getter
     private ItemEntry armor;
+    @Getter
     private ItemEntry rightHand;
+    @Getter
     private ItemEntry leftHand;
+    @Getter
     private ItemEntry legs;
+    @Getter
     private ItemEntry boots;
+    @Getter
     private ItemEntry ring;
+    @Getter
     private ItemEntry arrow;
 
     public Equipment(ByteBuffer byteBuffer) {
