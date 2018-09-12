@@ -97,7 +97,7 @@ public class Game {
     }
 
     public void attack(Creature creature) throws IOException {
-        if (!creature.getPositionZ().equals(getSelf().getPositionZ())) {
+        if (creature.getPositionZ() != getSelf().getPositionZ()) {
             log.warn("Cannot attack: {}, pos Z didn't match", creature.toString());
             return;
         }

@@ -42,7 +42,7 @@ public class BattleList {
         BattleList battleList = BattleList.allVisible(game);
         Creature creatureToRemove = null;
         for (Creature creature : battleList.creatureList) {
-            if (creature.getId().equals(creatureId)) {
+            if (creature.getId() == creatureId) {
                 creatureToRemove = creature;
                 break;
             }
@@ -61,7 +61,7 @@ public class BattleList {
         Creature closesCreature = null;
         int distance = Integer.MAX_VALUE;
         for (Creature creature : this.creatureList) {
-            if (!creature.getPositionZ().equals(from.getPositionZ())) {
+            if (creature.getPositionZ() != from.getPositionZ()) {
                 continue;
             }
             int currentDistance = from.distanceTo(creature);
@@ -101,7 +101,7 @@ public class BattleList {
             return null;
         }
         for (Creature creature : creatureList) {
-            if (creature.getId().equals(id)) {
+            if (creature.getId() == id) {
                 return creature;
             }
         }

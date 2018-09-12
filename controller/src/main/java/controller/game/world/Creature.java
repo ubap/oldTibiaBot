@@ -11,33 +11,33 @@ import java.nio.ByteBuffer;
 public class Creature {
 
     @Getter
-    private Integer id;
+    private int id;
     @Getter
     private String name;
     @Getter
-    private Integer positionX;
+    private int positionX;
     @Getter
-    private Integer positionY;
+    private int positionY;
     @Getter
-    private Integer positionZ;
-    private Integer screenX;
-    private Integer screenY;
-    private Integer walking;
-    private Integer direction;
-    private Integer outfit;
-    private Integer headColor;
-    private Integer bodyColor;
-    private Integer legsColor;
-    private Integer feetColor;
-    private Integer addons;
-    private Integer light;
-    private Integer lightColor;
-    private Integer blackSquare;
-    private Integer hpBar;
-    private Integer speed;
-    private Integer visible;
-    private Integer skull;
-    private Integer party;
+    private int positionZ;
+    private int screenX;
+    private int screenY;
+    private int walking;
+    private int direction;
+    private int outfit;
+    private int headColor;
+    private int bodyColor;
+    private int legsColor;
+    private int feetColor;
+    private int addons;
+    private int light;
+    private int lightColor;
+    private int blackSquare;
+    private int hpBar;
+    private int speed;
+    private int visible;
+    private int skull;
+    private int party;
 
 
     public Creature(ByteBuffer byteBuffer) {

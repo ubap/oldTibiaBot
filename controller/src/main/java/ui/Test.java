@@ -210,7 +210,7 @@ public class Test extends Application {
                     this.gameworld.getBattleList().getClosestCreature(self);
             if (closestCreature != null) {
                 this.targetNameTextField.setText(closestCreature.getName());
-                this.targetIdTextField.setText(closestCreature.getId().toString());
+                this.targetIdTextField.setText(String.valueOf(closestCreature.getId()));
             }
         } catch (Exception e) {
             e.printStackTrace();
