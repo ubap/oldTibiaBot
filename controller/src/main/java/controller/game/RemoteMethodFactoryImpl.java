@@ -22,7 +22,7 @@ public class RemoteMethodFactoryImpl implements RemoteMethodFactory {
     public PipeMessage say(String text) {
         RemoteMethod.Builder payloadCallBuilder = new RemoteMethod.Builder();
         return payloadCallBuilder
-                .setMethodAddress(constants.getAddressMethodSay())
+                .setMethodAddress(constants.getAddressMethodSay() + 1)
                 .addArgument(RemoteMethodArgument.int32(1))
                 .addArgument(RemoteMethodArgument.text(text))
                 .build();

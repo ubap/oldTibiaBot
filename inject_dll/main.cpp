@@ -1,7 +1,6 @@
 #include <Windows.h>
 #include <cstdio>
 #include <string>
-#include <vector>
 
 #include "PipeProtocolHandler.h"
 #include "PipeMessage.h"
@@ -135,6 +134,30 @@ void callWithDynamicArgs(void* addr, unsigned int argCount, void* args) {
 	}
 }
 
+bool ProcessCall(PipeMessage* message) {
+	DWORD address = message->nextDWORD();
+	int argCount = message->nextDWORD();
+	int argTypes[1024];
+	void* args[1024];
+	for (int i = 0; i < argCount; i++) {
+		argTypes[i] = message->nextDWORD(); // 1 - int, 2 - char*
+		switch (argTypes[i]) {
+		case 1: {
+			args[i] = (void*)message->nextDWORD(); break;
+		}
+		case 2: {
+			int length = message->nextDWORD();
+			args[i] = (void*)message->nextBytes(length);
+			break;
+		}
+		default:
+			return false;
+		}
+	}
+
+	callWithDynamicArgs((void*)address, argCount, args);
+}
+
 bool ProcessReadMem(PipeProtocolHandler* handler, PipeMessage* message) {
 	DWORD address = message->nextDWORD();
 	DWORD size = message->nextDWORD();
@@ -158,35 +181,17 @@ bool ProcessDetermineWsockAddr(PipeProtocolHandler* handler) {
 
 bool ProcessMessage(PipeProtocolHandler* handler, PipeMessage* message) {
 	int opCode = message->nextDWORD();
-	if (opCode == CMD_CALL) {
-		DWORD address = message->nextDWORD();
-		int argCount = message->nextDWORD();
-		int argTypes[1024];
-		void* args[1024];
-		for (int i = 0; i < argCount; i++) {
-			argTypes[i] = message->nextDWORD(); // 1 - int, 2 - char*
-			switch (argTypes[i]) {
-			case 1: {
-				args[i] = (void*)message->nextDWORD(); break;
-			}
-			case 2: {
-				int length = message->nextDWORD();
-				args[i] = (void*)message->nextBytes(length);
-				break;
-			}
-			default:
-				return false;
-			}
-		}
-
-		callWithDynamicArgs((void*)address, argCount, args);
-
-	} else if (opCode == CMD_READ_MEM) {
-		return ProcessReadMem(handler, message);
-	} else if (opCode == CMD_WRITE_MEM) {
-		return ProcessWriteMem(message);
+	switch (opCode) {
+		case CMD_CALL:
+			return ProcessCall(message);
+		case CMD_READ_MEM:
+			return ProcessReadMem(handler, message);
+		case CMD_WRITE_MEM:
+			return ProcessWriteMem(message);
 	}
-	return true;
+
+
+	return false;
 }
 
 /*
@@ -206,15 +211,16 @@ void PipeControl()
 			continue;
 
 		while (true) {
+			try {
 			// handle incoming msgs
 			PipeMessage message = pipeHandler.readMessage();
 			if (message.error())
 				break;
-			// debug purposes
-			fwrite(message.getAllData(), message.getDataLength(), 1, f);
-			fflush(f);
-
-			ProcessMessage(&pipeHandler, &message);
+				ProcessMessage(&pipeHandler, &message);
+			}
+			catch (...) {
+				break;
+			}
 		}
 	}
 }
