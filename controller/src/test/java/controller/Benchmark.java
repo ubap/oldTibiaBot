@@ -28,7 +28,7 @@ public class Benchmark {
             }
             Game game = new Game(pipe, new Consts854());
 
-            executeBenchmarks(game, Arrays.asList(1, 2, 4, 8, 16, 32, 64));
+            executeBenchmarks(game, Arrays.asList(1, 2, 4, 8, 16, 32, 64, 10000));
 
         } catch (Exception e) {
             e.printStackTrace();

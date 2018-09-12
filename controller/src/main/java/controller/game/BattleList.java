@@ -25,11 +25,11 @@ public class BattleList {
                         * game.getConstants().getBattleListEntrySize());
         PipeResponse pipeResponse = readMemoryMessage.execute(game.getPipe());
         BattleList battleList = new BattleList();
-        battleList.creatureList = new ArrayList<>(game.getConstants().getBattleListMaxEntries());
+        battleList.creatureList = new ArrayList<>();
         for (int i = 0; i < game.getConstants().getBattleListMaxEntries(); i++) {
-            Creature creature = new Creature(pipeResponse.getData());
+            Creature creature = Creature.getVisible(game, pipeResponse.getData());
             // this basically means this creature is VALID
-            if (creature.isVisible()) {
+            if (creature != null) {
                 battleList.creatureList.add(creature);
             }
         }

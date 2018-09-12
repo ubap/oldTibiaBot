@@ -1,5 +1,6 @@
 package controller.game.world;
 
+import controller.game.Game;
 import controller.game.Utils;
 import lombok.Getter;
 
@@ -39,8 +40,26 @@ public class Creature {
     private int skull;
     private int party;
 
+    /**
+     * Get creature or NULL if the creature is not visible.
+     *
+     * @param game Context
+     * @param byteBuffer The byte buffer to parse, it will be incremented by battleList entry size.
+     * @return NULL if creature at given byteBuffer position is not Visible.
+     */
+    public static Creature getVisible(Game game, ByteBuffer byteBuffer) {
+       int position = byteBuffer.position();
 
-    public Creature(ByteBuffer byteBuffer) {
+       int visible = byteBuffer.getInt(position + 144); // position of the visible attribute
+       if (visible != 0) {
+           return new Creature(byteBuffer);
+       }
+       byteBuffer.position(position + game.getConstants().getBattleListEntrySize());
+       return null;
+    }
+
+
+    private Creature(ByteBuffer byteBuffer) {
         // id
         this.id = byteBuffer.getInt();
         // name

@@ -25,5 +25,13 @@ public interface Constants {
     Integer getAddressMethodSay();
 
     Integer getAddressMethodAttack();
+
+    Integer getAddressTurnNorth();
+
+    Integer getAddressTurnWest();
+
+    Integer getAddressTurnSouth();
+
+    Integer getAddressTurnEast();
     // endregion
 }

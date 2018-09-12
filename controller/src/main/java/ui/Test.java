@@ -1,5 +1,6 @@
 package ui;
 
+import controller.game.RemoteMethodFactoryImpl;
 import remote.Pipe;
 import controller.constants.Consts854;
 import controller.game.world.Creature;
@@ -15,6 +16,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import os.ProcessListUtil;
+import remote.RemoteMethodFactory;
 
 import java.util.List;
 
@@ -229,14 +231,18 @@ public class Test extends Application {
 
     @FXML
     private void call() {
-
-
+        try {
+            RemoteMethodFactory remoteMethodFactory = new RemoteMethodFactoryImpl(this.gameworld.getConstants());
+            remoteMethodFactory.turnNorth().execute(this.gameworld.getPipe());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
 
     private void setupGameWorld() {
         try {
-            List<Integer> processList = ProcessListUtil.getProcessList("Kasteria.exe");
+            List<Integer> processList = ProcessListUtil.getProcessList("Tibia.exe");
             if (processList.size() > 0) {
                 Pipe pipe = Pipe.forName("\\\\.\\pipe\\oldTibiaBot" + processList.get(0));
                 gameworld = new Game(pipe, new Consts854());

@@ -22,7 +22,7 @@ public class RemoteMethodFactoryImpl implements RemoteMethodFactory {
     public PipeMessage say(String text) {
         RemoteMethod.Builder payloadCallBuilder = new RemoteMethod.Builder();
         return payloadCallBuilder
-                .setMethodAddress(constants.getAddressMethodSay() + 1)
+                .setMethodAddress(constants.getAddressMethodSay())
                 .addArgument(RemoteMethodArgument.int32(1))
                 .addArgument(RemoteMethodArgument.text(text))
                 .build();
@@ -34,6 +34,38 @@ public class RemoteMethodFactoryImpl implements RemoteMethodFactory {
         return payloadCallBuilder
                 .setMethodAddress(constants.getAddressMethodAttack())
                 .addArgument(RemoteMethodArgument.int32(creatureId))
+                .build();
+    }
+
+    @Override
+    public PipeMessage turnNorth() {
+        RemoteMethod.Builder payloadCallBuilder = new RemoteMethod.Builder();
+        return payloadCallBuilder
+                .setMethodAddress(constants.getAddressTurnNorth())
+                .build();
+    }
+
+    @Override
+    public PipeMessage turnWest() {
+        RemoteMethod.Builder payloadCallBuilder = new RemoteMethod.Builder();
+        return payloadCallBuilder
+                .setMethodAddress(constants.getAddressTurnWest())
+                .build();
+    }
+
+    @Override
+    public PipeMessage turnSouth() {
+        RemoteMethod.Builder payloadCallBuilder = new RemoteMethod.Builder();
+        return payloadCallBuilder
+                .setMethodAddress(constants.getAddressTurnSouth())
+                .build();
+    }
+
+    @Override
+    public PipeMessage turnEast() {
+        RemoteMethod.Builder payloadCallBuilder = new RemoteMethod.Builder();
+        return payloadCallBuilder
+                .setMethodAddress(constants.getAddressTurnEast())
                 .build();
     }
 }

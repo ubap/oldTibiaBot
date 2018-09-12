@@ -22,7 +22,7 @@
                         <Button layoutX="169.0" layoutY="73.0" mnemonicParsing="false" onAction="#attack" text="Attack" />
                         <Button fx:id="closestCreatureButton" layoutX="14.0" layoutY="105.0" mnemonicParsing="false" onAction="#getClosestCreature" text="Get Closest Creature" />
                         <Button layoutX="14.0" layoutY="130.0" mnemonicParsing="false" onAction="#getInventory" text="Get Inventory" />
-                        <Button fx:id="call" layoutX="14.0" layoutY="155.0" mnemonicParsing="false" text="Call" />
+                        <Button fx:id="callButton" layoutX="14.0" layoutY="155.0" mnemonicParsing="false" onAction="#call" text="Call" />
                         <TextField fx:id="targetIdTextField" layoutX="14.0" layoutY="73.0" />
                      </children>
                   </AnchorPane>
