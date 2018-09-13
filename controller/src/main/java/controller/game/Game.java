@@ -65,12 +65,12 @@ public class Game {
     }
 
     /**
-     * Returns BattleList with all visible creatures, without self.
+     * Returns BattleList with all visible creatures, without self. Only the same floor as self.
      *
      * @return BattleList
      */
     public BattleList getBattleList() throws IOException {
-        return BattleList.allVisibleWithoutGiven(this, getSelfId());
+        return BattleList.allVisibleWithoutGivenSameFloor(this, getSelf());
     }
 
     public Integer getPlayerHp() throws IOException {

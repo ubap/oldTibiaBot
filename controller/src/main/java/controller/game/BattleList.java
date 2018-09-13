@@ -36,13 +36,15 @@ public class BattleList {
         return battleList;
     }
 
-    public static BattleList allVisibleWithoutGiven(Game game, Integer creatureId)
+    public static BattleList allVisibleWithoutGivenSameFloor(Game game, Creature givenCreature)
             throws IOException {
 
         BattleList battleList = BattleList.allVisible(game);
         Creature creatureToRemove = null;
         for (Creature creature : battleList.creatureList) {
-            if (creature.getId() == creatureId) {
+            if (creature.getId() == givenCreature.getId()
+                    && creature.getPositionZ() == givenCreature.getPositionZ()) {
+
                 creatureToRemove = creature;
                 break;
             }
@@ -106,5 +108,9 @@ public class BattleList {
             }
         }
         return null;
+    }
+
+    public List<Creature> getCreatureList() {
+        return new ArrayList<>(this.creatureList);
     }
 }
