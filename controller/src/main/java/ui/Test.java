@@ -1,11 +1,11 @@
 package ui;
 
-import controller.Pipe;
-import controller.PipeMessage;
+import controller.game.RemoteMethodFactoryImpl;
+import remote.Pipe;
 import controller.constants.Consts854;
 import controller.game.world.Creature;
-import controller.game.GameWorld;
-import controller.game.world.Inventory;
+import controller.game.Game;
+import controller.game.Inventory;
 import javafx.application.Application;
 import javafx.concurrent.Task;
 import javafx.fxml.FXML;
@@ -15,6 +15,10 @@ import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
+import os.ProcessListUtil;
+import remote.RemoteMethodFactory;
+
+import java.util.List;
 
 /**
  * Test module for all the features so manual tests can be easier performed.
@@ -32,7 +36,7 @@ public class Test extends Application {
     @FXML private Label posZLabel;
     @FXML private Label hitsLabel;
 
-    private GameWorld gameworld;
+    private Game gameworld;
 
     @Override
     public void start(Stage primaryStage) throws Exception {
@@ -190,7 +194,8 @@ public class Test extends Application {
     private void attack() {
         try {
             String targetId = this.targetIdTextField.getText();
-            Creature creature = this.gameworld.getBattleList().getCreatureById(Integer.valueOf(targetId));
+            Creature creature = this.gameworld.getBattleList()
+                    .getCreatureById(Integer.valueOf(targetId));
             if (creature != null) {
                 this.gameworld.attack(creature);
             }
@@ -207,7 +212,7 @@ public class Test extends Application {
                     this.gameworld.getBattleList().getClosestCreature(self);
             if (closestCreature != null) {
                 this.targetNameTextField.setText(closestCreature.getName());
-                this.targetIdTextField.setText(closestCreature.getId().toString());
+                this.targetIdTextField.setText(String.valueOf(closestCreature.getId()));
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -227,8 +232,15 @@ public class Test extends Application {
     @FXML
     private void call() {
         try {
-            PipeMessage pipeMessage = PipeMessage.call();
-            this.gameworld.getPipe().send(pipeMessage);
+            RemoteMethodFactory remoteMethodFactory = new RemoteMethodFactoryImpl(this.gameworld.getConstants());
+            remoteMethodFactory.turnNorth().execute(this.gameworld.getPipe());
+
+
+            Inventory inventory = this.gameworld.getInventory();
+            remoteMethodFactory
+                    .useItemOnCreature(inventory.getEquipment().getArrow().getId(), this.gameworld.getSelf())
+                    .execute(this.gameworld.getPipe());
+
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -237,8 +249,11 @@ public class Test extends Application {
 
     private void setupGameWorld() {
         try {
-            Pipe pipe = Pipe.forName("\\\\.\\pipe\\oldTibiaBot16928");
-            gameworld = new GameWorld(pipe, new Consts854());
+            List<Integer> processList = ProcessListUtil.getProcessList("Tibia.exe");
+            if (processList.size() > 0) {
+                Pipe pipe = Pipe.forName("\\\\.\\pipe\\oldTibiaBot" + processList.get(0));
+                gameworld = new Game(pipe, new Consts854());
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }

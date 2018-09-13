@@ -1,4 +1,4 @@
-package controller;
+package remote;
 
 import java.nio.ByteBuffer;
 
@@ -8,6 +8,14 @@ import java.nio.ByteBuffer;
 public class PipeResponse {
     private boolean error;
     private ByteBuffer data;
+
+    private static PipeResponse RESPONSE_NO_DATA;
+
+    static {
+        RESPONSE_NO_DATA = new PipeResponse();
+        RESPONSE_NO_DATA.error = false;
+        RESPONSE_NO_DATA.data = null;
+    }
 
     private PipeResponse() {
     }
@@ -27,10 +35,7 @@ public class PipeResponse {
     }
 
     public static PipeResponse responseNoData() {
-        PipeResponse pipeResponse = new PipeResponse();
-        pipeResponse.error = false;
-        pipeResponse.data = null;
-        return pipeResponse;
+        return RESPONSE_NO_DATA;
     }
 
     public boolean isError() {

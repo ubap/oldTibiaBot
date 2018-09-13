@@ -1,5 +1,6 @@
 package controller.game.world;
 
+import controller.game.Game;
 import controller.game.Utils;
 import lombok.Getter;
 
@@ -11,36 +12,54 @@ import java.nio.ByteBuffer;
 public class Creature {
 
     @Getter
-    private Integer id;
+    private int id;
     @Getter
     private String name;
     @Getter
-    private Integer positionX;
+    private int positionX;
     @Getter
-    private Integer positionY;
+    private int positionY;
     @Getter
-    private Integer positionZ;
-    private Integer screenX;
-    private Integer screenY;
-    private Integer walking;
-    private Integer direction;
-    private Integer outfit;
-    private Integer headColor;
-    private Integer bodyColor;
-    private Integer legsColor;
-    private Integer feetColor;
-    private Integer addons;
-    private Integer light;
-    private Integer lightColor;
-    private Integer blackSquare;
-    private Integer hpBar;
-    private Integer speed;
-    private Integer visible;
-    private Integer skull;
-    private Integer party;
+    private int positionZ;
+    private int screenX;
+    private int screenY;
+    private int walking;
+    private int direction;
+    private int outfit;
+    private int headColor;
+    private int bodyColor;
+    private int legsColor;
+    private int feetColor;
+    private int addons;
+    private int light;
+    private int lightColor;
+    private int blackSquare;
+    private int hpBar;
+    private int speed;
+    private int visible;
+    private int skull;
+    private int party;
+
+    /**
+     * Get creature or NULL if the creature is not visible.
+     *
+     * @param game Context
+     * @param byteBuffer The byte buffer to parse, it will be incremented by battleList entry size.
+     * @return NULL if creature at given byteBuffer position is not Visible.
+     */
+    public static Creature getVisible(Game game, ByteBuffer byteBuffer) {
+       int position = byteBuffer.position();
+
+       int visible = byteBuffer.getInt(position + 144); // position of the visible attribute
+       if (visible != 0) {
+           return new Creature(byteBuffer);
+       }
+       byteBuffer.position(position + game.getConstants().getBattleListEntrySize());
+       return null;
+    }
 
 
-    public Creature(ByteBuffer byteBuffer) {
+    private Creature(ByteBuffer byteBuffer) {
         // id
         this.id = byteBuffer.getInt();
         // name

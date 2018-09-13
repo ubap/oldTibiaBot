@@ -1,6 +1,4 @@
-package controller.game.world;
-
-import controller.game.Utils;
+package controller.game;
 
 import java.nio.ByteBuffer;
 import java.util.ArrayList;

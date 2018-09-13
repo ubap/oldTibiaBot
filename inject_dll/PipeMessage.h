@@ -21,4 +21,7 @@ public:
 	DWORD nextDWORD();
 	const char* nextText();
 	const char* nextBytes(unsigned int count);
+	const char* getAllData() { return m_data; }
+	unsigned int getDataLength() { return m_dataLength; }
+
 };

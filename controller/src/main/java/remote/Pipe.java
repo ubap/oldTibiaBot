@@ -1,4 +1,4 @@
-package controller;
+package remote;
 
 import lombok.Getter;
 
@@ -13,7 +13,8 @@ public class Pipe {
 
     private RandomAccessFile file;
     // for diagnosis purposes
-    @Getter private long hits;
+    @Getter
+    private long hits;
 
     public static Pipe forName(String name) throws FileNotFoundException {
         RandomAccessFile file = new RandomAccessFile(name, "rw");
@@ -25,10 +26,9 @@ public class Pipe {
         this.hits = 0;
     }
 
-    public synchronized PipeResponse send(PipeMessage pipeMessage) throws IOException {
+    public synchronized PipeResponse send(byte[] bytes, int responseLength) throws IOException {
         this.hits++;
-        this.file.write(pipeMessage.array());
-        int responseLength = pipeMessage.getResponseLength();
+        this.file.write(bytes);
         if (responseLength > 0) {
             byte[] responseData = new byte[responseLength];
             this.file.read(responseData,0, responseLength);

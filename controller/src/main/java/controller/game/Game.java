@@ -1,33 +1,42 @@
 package controller.game;
 
-import controller.Pipe;
-import controller.PipeMessage;
-import controller.PipeResponse;
+import remote.*;
 import controller.constants.Constants;
 import controller.game.world.Creature;
-import controller.game.world.Inventory;
 import lombok.Getter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 
-public class GameWorld {
-    private static final Logger log = LoggerFactory.getLogger(GameWorld.class);
+/**
+ * Acts as a *Context* class
+ */
+public class Game {
+    private static final Logger log = LoggerFactory.getLogger(Game.class);
 
     @Getter
     private Pipe pipe;
     @Getter
     private Constants constants;
 
-    public GameWorld(Pipe pipe, Constants constants) {
+    @Getter
+    private RemoteMethodFactory remoteMethodFactory;
+    @Getter
+    private RemoteMemoryFactory remoteMemoryFactory;
+
+
+    public Game(Pipe pipe, Constants constants) {
         this.pipe = pipe;
         this.constants = constants;
+        this.remoteMethodFactory = new RemoteMethodFactoryImpl(this.constants);
+        this.remoteMemoryFactory = new RemoteMemoryFactoryImpl();
     }
 
     public Integer getSelfId() throws IOException {
-        PipeResponse pipeResponse
-                = this.pipe.send(PipeMessage.readMemory(this.constants.addressPlayerId(), 4));
+        PipeResponse pipeResponse = this.remoteMemoryFactory
+                .readInt(this.constants.getAddressPlayerId())
+                .execute(this.pipe);
         return pipeResponse.getData().getInt();
     }
 
@@ -65,14 +74,15 @@ public class GameWorld {
     }
 
     public Integer getPlayerHp() throws IOException {
-        PipeResponse pipeResponse = this.pipe.send(
-                PipeMessage.readMemory(this.constants.addressPlayerHp(), 4));
+        PipeResponse pipeResponse
+                = this.remoteMemoryFactory.readInt(
+                        this.constants.getAddressPlayerHp()).execute(this.pipe);
         return pipeResponse.getData().getInt();
     }
 
     public Integer getPlayerMp() throws IOException {
-        PipeResponse pipeResponse = this.pipe.send(
-                PipeMessage.readMemory(this.constants.addressPlayerMp(), 4));
+        PipeResponse pipeResponse = this.remoteMemoryFactory.readInt(
+                        this.constants.getAddressPlayerMp()).execute(this.pipe);
         return pipeResponse.getData().getInt();
     }
 
@@ -83,18 +93,20 @@ public class GameWorld {
     // actions
 
     public void say(String text) throws IOException {
-        this.pipe.send(PipeMessage.say(text));
+        this.remoteMethodFactory.say(text).execute(this.pipe);
     }
 
     public void attack(Creature creature) throws IOException {
-        if (!creature.getPositionZ().equals(getSelf().getPositionZ())) {
+        if (creature.getPositionZ() != getSelf().getPositionZ()) {
             log.warn("Cannot attack: {}, pos Z didn't match", creature.toString());
             return;
         }
         log.info("Attack: {}", creature.toString());
-        // send a packet to game world
-        this.pipe.send(PipeMessage.attack(creature.getId()));
-        this.pipe.send(PipeMessage.writeInt(this.constants.addressTargetId(), creature.getId()));
+        // execute a packet to game world
+        this.remoteMethodFactory.attack(creature.getId()).execute(this.pipe);
+        this.remoteMemoryFactory.writeInt(
+                this.constants.getAddressTargetId(), creature.getId()).execute(this.pipe);
+
     }
 
     public Long getHits() {
