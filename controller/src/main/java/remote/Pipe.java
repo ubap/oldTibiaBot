@@ -39,4 +39,8 @@ public class Pipe {
 
         return PipeResponse.responseNoData();
     }
+
+    public void disconnect() throws IOException {
+        this.file.close();
+    }
 }
