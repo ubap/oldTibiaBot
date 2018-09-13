@@ -21,7 +21,7 @@ public class Game {
     private Constants constants;
 
     @Getter
-    private RemoteMethodFactory remoteMethodFactory;
+    private RemoteMethod remoteMethod;
     @Getter
     private RemoteMemoryFactory remoteMemoryFactory;
 
@@ -29,7 +29,7 @@ public class Game {
     public Game(Pipe pipe, Constants constants) {
         this.pipe = pipe;
         this.constants = constants;
-        this.remoteMethodFactory = new RemoteMethodFactoryImpl(this.constants);
+        this.remoteMethod = new RemoteMethodImpl(this);
         this.remoteMemoryFactory = new RemoteMemoryFactoryImpl();
     }
 
@@ -93,7 +93,7 @@ public class Game {
     // actions
 
     public void say(String text) throws IOException {
-        this.remoteMethodFactory.say(text).execute(this.pipe);
+        this.remoteMethod.say(text);
     }
 
     public void attack(Creature creature) throws IOException {
@@ -103,7 +103,7 @@ public class Game {
         }
         log.info("Attack: {}", creature.toString());
         // execute a packet to game world
-        this.remoteMethodFactory.attack(creature.getId()).execute(this.pipe);
+        this.remoteMethod.attack(creature.getId());
         this.remoteMemoryFactory.writeInt(
                 this.constants.getAddressTargetId(), creature.getId()).execute(this.pipe);
 

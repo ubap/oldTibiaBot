@@ -1,6 +1,6 @@
 package ui;
 
-import controller.game.RemoteMethodFactoryImpl;
+import controller.game.RemoteMethodImpl;
 import remote.Pipe;
 import controller.constants.Consts854;
 import controller.game.world.Creature;
@@ -16,7 +16,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import os.ProcessListUtil;
-import remote.RemoteMethodFactory;
+import remote.RemoteMethod;
 
 import java.util.List;
 
@@ -232,14 +232,13 @@ public class Test extends Application {
     @FXML
     private void call() {
         try {
-            RemoteMethodFactory remoteMethodFactory = new RemoteMethodFactoryImpl(this.gameworld.getConstants());
-            remoteMethodFactory.turnNorth().execute(this.gameworld.getPipe());
+            RemoteMethod remoteMethod = new RemoteMethodImpl(this.gameworld);
+            remoteMethod.turnNorth();
 
 
             Inventory inventory = this.gameworld.getInventory();
-            remoteMethodFactory
-                    .useItemOnCreature(inventory.getEquipment().getArrow().getId(), this.gameworld.getSelf())
-                    .execute(this.gameworld.getPipe());
+            remoteMethod
+                    .useItemOnCreature(inventory.getEquipment().getArrow().getId(), this.gameworld.getSelf());
 
         } catch (Exception e) {
             e.printStackTrace();

@@ -1,5 +1,6 @@
 package controller.game;
 
+import remote.Pipe;
 import remote.PipeMessage;
 import remote.RemoteMemory;
 import remote.RemoteMemoryFactory;
@@ -8,6 +9,8 @@ import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 
 public class RemoteMemoryFactoryImpl implements RemoteMemoryFactory {
+
+
 
     @Override
     public PipeMessage writeBytes(Integer address, Integer size, byte[] data) {
