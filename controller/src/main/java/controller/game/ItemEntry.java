@@ -19,4 +19,9 @@ public class ItemEntry {
     public static Integer byteCount() {
         return 12;
     }
+
+    @Override
+    public String toString() {
+        return String.valueOf(id);
+    }
 }

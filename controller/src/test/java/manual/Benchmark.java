@@ -1,4 +1,4 @@
-package controller;
+package manual;
 
 import controller.constants.Consts854;
 import controller.game.Game;

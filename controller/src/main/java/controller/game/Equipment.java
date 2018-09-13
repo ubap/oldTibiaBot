@@ -43,4 +43,30 @@ public class Equipment {
     public static Integer byteCount() {
         return 10 * ItemEntry.byteCount();
     }
+
+    @Override
+    public String toString() {
+        return new StringBuilder()
+                .append("head: ")
+                .append(this.head)
+                .append(", necklace: ")
+                .append(this.necklace)
+                .append(", backpack: ")
+                .append(this.backpack)
+                .append(", armor: ")
+                .append(this.armor)
+                .append(", rightHand: ")
+                .append(this.rightHand)
+                .append(", leftHand: ")
+                .append(this.leftHand)
+                .append(", legs: ")
+                .append(this.legs)
+                .append(", boots: ")
+                .append(this.boots)
+                .append(", ring: ")
+                .append(this.ring)
+                .append(", arrow: ")
+                .append(this.arrow)
+                .toString();
+    }
 }

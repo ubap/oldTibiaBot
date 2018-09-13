@@ -34,7 +34,8 @@ public class Creature {
     private int light;
     private int lightColor;
     private int blackSquare;
-    private int hpBar;
+    @Getter
+    private int hpPc;
     private int speed;
     private int visible;
     private int skull;
@@ -89,7 +90,7 @@ public class Creature {
         // unknown so far, todo
         byteBuffer.getInt();
         this.blackSquare = byteBuffer.getInt();
-        this.hpBar = byteBuffer.getInt();
+        this.hpPc = byteBuffer.getInt();
         this.speed = byteBuffer.getInt();
         this.visible = byteBuffer.getInt();
         this.skull = byteBuffer.getInt();
