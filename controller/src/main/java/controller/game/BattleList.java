@@ -1,5 +1,7 @@
 package controller.game;
 
+import controller.game.world.CreatureFactory;
+import controller.game.world.CreatureFactoryImpl;
 import remote.PipeMessage;
 import remote.PipeResponse;
 import controller.game.world.Creature;
@@ -32,7 +34,7 @@ public class BattleList {
         BattleList battleList = new BattleList();
         battleList.creatureList = new ArrayList<>();
         for (int i = 0; i < game.getConstants().getBattleListMaxEntries(); i++) {
-            Creature creature = Creature.getVisible(game, pipeResponse.getData());
+            Creature creature = game.getCreatureFactory().getVisible(pipeResponse.getData());
             // this basically means this creature is VALID
             if (creature != null) {
                 if (givenFloor == null || creature.getPositionZ() == givenFloor) {

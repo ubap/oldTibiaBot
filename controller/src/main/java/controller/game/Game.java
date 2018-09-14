@@ -1,5 +1,8 @@
 package controller.game;
 
+import controller.game.world.CreatureFactory;
+import controller.game.world.CreatureFactoryImpl;
+import controller.game.world.Player;
 import remote.*;
 import controller.constants.Constants;
 import controller.game.world.Creature;
@@ -21,14 +24,18 @@ public class Game {
     private Constants constants;
 
     @Getter
+    private CreatureFactory creatureFactory;
+    @Getter
     private RemoteMethod remoteMethod;
     @Getter
     private RemoteMemoryFactory remoteMemoryFactory;
 
 
+
     public Game(Pipe pipe, Constants constants) {
         this.pipe = pipe;
         this.constants = constants;
+        this.creatureFactory = new CreatureFactoryImpl(this);
         this.remoteMethod = new RemoteMethodImpl(this);
         this.remoteMemoryFactory = new RemoteMemoryFactoryImpl();
     }
@@ -45,13 +52,13 @@ public class Game {
      * blocks thread for few moments if self is not found in the BattleList. This happen on Re-Log
      * @return Creature representing Self or null if timed out.
      */
-    public Creature getSelf() throws IOException {
+    public Player getSelf() throws IOException {
         int retries = 0;
         Creature self;
         while (retries < 200) {
             self = BattleList.allVisible(this).getCreatureById(getSelfId());
             if (self != null) {
-                return self;
+                return this.creatureFactory.getPlayer(self);
             }
             retries++;
             try {
