@@ -11,6 +11,8 @@ public class PlayerImpl implements Player {
 
     private Creature creature;
     private int hp;
+    private int mp;
+    private double cap;
 
     public PlayerImpl(Game game, Creature creature) throws IOException {
         this.creature = creature;
@@ -18,6 +20,14 @@ public class PlayerImpl implements Player {
                 .readInt(game.getConstants().getAddressPlayerHp())
                 .execute(game.getPipe())
                 .getData().getInt();
+        this.mp = game.getRemoteMemoryFactory()
+                .readInt(game.getConstants().getAddressPlayerMp())
+                .execute(game.getPipe())
+                .getData().getInt();
+        this.cap = game.getRemoteMemoryFactory()
+                .readInt(game.getConstants().getAddressPlayerCap())
+                .execute(game.getPipe())
+                .getData().getInt() / 100.;
     }
 
     // region Creature interface
@@ -69,6 +79,16 @@ public class PlayerImpl implements Player {
     @Override
     public int getHp() {
         return this.hp;
+    }
+
+    @Override
+    public int getMp() {
+        return this.mp;
+    }
+
+    @Override
+    public double getCap() {
+        return this.cap;
     }
 
     // endregion

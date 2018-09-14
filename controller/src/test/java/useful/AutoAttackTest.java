@@ -3,7 +3,6 @@ package useful;
 import controller.TestHelper;
 import controller.game.Game;
 import controller.game.world.Creature;
-import org.omg.PortableInterceptor.SYSTEM_EXCEPTION;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -50,7 +49,7 @@ public class AutoAttackTest {
                             && self.distanceTo(creature) < 1.5) {
                         game.attack(creature);
                         log.info("Avg scanning time: {} ms, scans done: {}",
-                                (avgTime / 1000000.) / times, times);
+                                TestHelper.nanoToMillis(avgTime) / times, times);
                         break;
                     }
                 }

@@ -16,6 +16,7 @@ public class TestHelper {
     private static final String PROCESS_NAME = "Kasteria.exe";
 
     private static Game game = null;
+    private static long benchmarkTime;
 
     public static Game getGame() throws Exception {
         if (game == null) {
@@ -31,6 +32,27 @@ public class TestHelper {
             game = new Game(pipe, new Consts854());
         }
         return game;
+    }
+
+    public static void startBenchmarkTime() {
+        benchmarkTime = System.nanoTime();
+    }
+
+    public static double captureBenchmarkTime() {
+        return System.nanoTime() - benchmarkTime;
+    }
+
+    public static void logBenchmarkTime(Logger log, String tag) {
+        double benchmarkTimeMillis = nanoToMillis(captureBenchmarkTime());
+        log.info("{}: Benchmarked time: {} ms", tag, benchmarkTimeMillis);
+    }
+
+    public static double nanoToMillis(double nano) {
+        return (nano / 1000000.);
+    }
+
+    public static double nanoToMillis(long nano) {
+        return (nano / 1000000.);
     }
 
 }
