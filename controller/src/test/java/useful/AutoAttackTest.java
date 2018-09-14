@@ -27,7 +27,8 @@ public class AutoAttackTest {
             "Rotworm",
             "Bat",
             "Poison Spider",
-            "Dwarf Guard"
+            "Dwarf Guard",
+            "Training Dummy"
     );
 
     public static void main(String argv[]) throws Exception {
