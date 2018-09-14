@@ -16,7 +16,7 @@ public class ItemEntry {
         this.extraData2 = byteBuffer.getInt();
     }
 
-    public static Integer byteCount() {
+    public static int byteCount() {
         return 12;
     }
 
