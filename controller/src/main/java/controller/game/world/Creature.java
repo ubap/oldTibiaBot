@@ -112,9 +112,9 @@ public class Creature {
      * @param other the creature to calculate distance to. Z is not considered
      * @return Distance calculated using Manhattan.
      */
-    public int distanceTo(Creature other) {
-        return Math.abs(getPositionX() - other.getPositionX())
-                + Math.abs(getPositionY() - other.getPositionY());
+    public double distanceTo(Creature other) {
+        return Math.sqrt(Math.pow(getPositionX() - other.getPositionX(), 2)
+                + Math.pow(getPositionY() - other.getPositionY(), 2));
     }
 
 

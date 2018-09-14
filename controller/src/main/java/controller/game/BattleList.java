@@ -17,7 +17,12 @@ public class BattleList {
 
     private BattleList() { }
 
+
     public static BattleList allVisible(Game game) throws IOException {
+        return allVisible(game, null);
+    }
+
+    public static BattleList allVisible(Game game, Integer givenFloor) throws IOException {
 
         PipeMessage readMemoryMessage = game.getRemoteMemoryFactory().readBytes(
                 game.getConstants().getAddressBattleListStart(),
@@ -30,7 +35,9 @@ public class BattleList {
             Creature creature = Creature.getVisible(game, pipeResponse.getData());
             // this basically means this creature is VALID
             if (creature != null) {
-                battleList.creatureList.add(creature);
+                if (givenFloor == null || creature.getPositionZ() == givenFloor) {
+                    battleList.creatureList.add(creature);
+                }
             }
         }
         return battleList;
@@ -39,11 +46,10 @@ public class BattleList {
     public static BattleList allVisibleWithoutGivenSameFloor(Game game, Creature givenCreature)
             throws IOException {
 
-        BattleList battleList = BattleList.allVisible(game);
+        BattleList battleList = BattleList.allVisible(game, givenCreature.getPositionZ());
         Creature creatureToRemove = null;
         for (Creature creature : battleList.creatureList) {
-            if (creature.getId() == givenCreature.getId()
-                    && creature.getPositionZ() == givenCreature.getPositionZ()) {
+            if (creature.getId() == givenCreature.getId()) {
 
                 creatureToRemove = creature;
                 break;
@@ -61,12 +67,12 @@ public class BattleList {
             return null;
         }
         Creature closesCreature = null;
-        int distance = Integer.MAX_VALUE;
+        double distance = Integer.MAX_VALUE;
         for (Creature creature : this.creatureList) {
             if (creature.getPositionZ() != from.getPositionZ()) {
                 continue;
             }
-            int currentDistance = from.distanceTo(creature);
+            double currentDistance = from.distanceTo(creature);
             if (distance > currentDistance) {
                 distance = currentDistance;
                 closesCreature = creature;

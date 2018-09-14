@@ -109,6 +109,23 @@ public class Game {
 
     }
 
+    public int getTargetId() throws IOException {
+        return this.remoteMemoryFactory.readInt(
+                this.constants.getAddressTargetId()).execute(this.pipe).getData().getInt(0);
+    }
+
+    public boolean isTargeting() throws IOException {
+        int targetId = getTargetId();
+        if (targetId == 0) {
+            return false;
+        }
+        Creature creature = getBattleList().getCreatureById(targetId);
+        if (creature == null) {
+            return false;
+        }
+        return true;
+    }
+
     public Long getHits() {
         return this.pipe.getHits();
     }
