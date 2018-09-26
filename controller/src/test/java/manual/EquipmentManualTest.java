@@ -4,6 +4,7 @@ import controller.TestHelper;
 import controller.game.Container;
 import controller.game.Game;
 import controller.logic.InventoryHelper;
+import controller.logic.Looter;
 import controller.logic.OnContainerOpened;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -26,6 +27,19 @@ public class EquipmentManualTest {
             @Override
             public void onContainerOpened(Container container) {
                 log.info("Container opened {}", container.getWindowName());
+                Looter looter = new Looter(game);
+                int itemPos = looter.searchForItemInContainer(container, 3031);
+                log.info("itemPos: {}", itemPos);
+            }
+
+            @Override
+            public void onContainerClosed(int pos) {
+
+            }
+
+            @Override
+            public void onContainerChanged(Container container) {
+
             }
         });
 

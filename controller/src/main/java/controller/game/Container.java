@@ -16,6 +16,7 @@ public class Container {
     @Getter
     private String windowName;
     private int itemCount;
+    @Getter
     private List<ItemEntry> backpackItems; // max 36
 
     public Container(ByteBuffer byteBuffer, Integer position) {
