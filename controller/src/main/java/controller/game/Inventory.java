@@ -12,6 +12,7 @@ import java.util.List;
 public class Inventory {
     @Getter
     private Equipment equipment;
+    @Getter
     private List<Container> containerList;
 
     public Inventory(Game game) throws IOException {

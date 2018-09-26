@@ -1,15 +1,19 @@
 package controller.game;
 
+import lombok.Getter;
+
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.List;
 
 public class Container {
     // position is not read from memory
+    @Getter
     private int position;
 
     private int open;
     private ItemEntry item;
+    @Getter
     private String windowName;
     private int itemCount;
     private List<ItemEntry> backpackItems; // max 36
