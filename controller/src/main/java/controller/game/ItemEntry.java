@@ -16,7 +16,12 @@ public class ItemEntry {
         this.extraData2 = byteBuffer.getInt();
     }
 
-    public static Integer byteCount() {
+    public static int byteCount() {
         return 12;
+    }
+
+    @Override
+    public String toString() {
+        return String.valueOf(id);
     }
 }

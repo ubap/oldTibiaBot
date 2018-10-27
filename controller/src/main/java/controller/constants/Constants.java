@@ -1,39 +1,39 @@
 package controller.constants;
 
 public interface Constants {
-    Integer getAddressPlayerId();
+    int getAddressPlayerId();
 
-    Integer getAddressBattleListStart();
+    int getAddressBattleListStart();
 
-    Integer getBattleListMaxEntries();
+    int getBattleListMaxEntries();
 
-    Integer getBattleListEntrySize();
+    int getBattleListEntrySize();
 
-    Integer getAddressPlayerHp();
+    int getAddressPlayerHp();
 
-    Integer getAddressPlayerMp();
+    int getAddressPlayerMp();
 
-    Integer getAddressPlayerCap();
+    int getAddressPlayerCap();
 
-    Integer getAddressTargetId();
+    int getAddressTargetId();
 
-    Integer getAddressInventoryBegin();
+    int getAddressInventoryBegin();
 
-    Integer getMaxContainerWindows();
+    int getMaxContainerWindows();
 
     // region Remote methods
-    Integer getAddressMethodSay();
+    int getAddressMethodSay();
 
-    Integer getAddressMethodAttack();
+    int getAddressMethodAttack();
 
-    Integer getAddressTurnNorth();
+    int getAddressTurnNorth();
 
-    Integer getAddressTurnWest();
+    int getAddressTurnWest();
 
-    Integer getAddressTurnSouth();
+    int getAddressTurnSouth();
 
-    Integer getAddressTurnEast();
+    int getAddressTurnEast();
 
-    Integer getAddressUse();
+    int getAddressUse();
     // endregion
 }

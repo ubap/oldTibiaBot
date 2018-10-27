@@ -1,5 +1,7 @@
 package controller.game;
 
+import controller.game.world.CreatureFactory;
+import controller.game.world.CreatureFactoryImpl;
 import remote.PipeMessage;
 import remote.PipeResponse;
 import controller.game.world.Creature;
@@ -17,7 +19,12 @@ public class BattleList {
 
     private BattleList() { }
 
+
     public static BattleList allVisible(Game game) throws IOException {
+        return allVisible(game, null);
+    }
+
+    public static BattleList allVisible(Game game, Integer givenFloor) throws IOException {
 
         PipeMessage readMemoryMessage = game.getRemoteMemoryFactory().readBytes(
                 game.getConstants().getAddressBattleListStart(),
@@ -27,22 +34,25 @@ public class BattleList {
         BattleList battleList = new BattleList();
         battleList.creatureList = new ArrayList<>();
         for (int i = 0; i < game.getConstants().getBattleListMaxEntries(); i++) {
-            Creature creature = Creature.getVisible(game, pipeResponse.getData());
+            Creature creature = game.getCreatureFactory().getVisible(pipeResponse.getData());
             // this basically means this creature is VALID
             if (creature != null) {
-                battleList.creatureList.add(creature);
+                if (givenFloor == null || creature.getPositionZ() == givenFloor) {
+                    battleList.creatureList.add(creature);
+                }
             }
         }
         return battleList;
     }
 
-    public static BattleList allVisibleWithoutGiven(Game game, Integer creatureId)
+    public static BattleList allVisibleWithoutGivenSameFloor(Game game, Creature givenCreature)
             throws IOException {
 
-        BattleList battleList = BattleList.allVisible(game);
+        BattleList battleList = BattleList.allVisible(game, givenCreature.getPositionZ());
         Creature creatureToRemove = null;
         for (Creature creature : battleList.creatureList) {
-            if (creature.getId() == creatureId) {
+            if (creature.getId() == givenCreature.getId()) {
+
                 creatureToRemove = creature;
                 break;
             }
@@ -59,12 +69,12 @@ public class BattleList {
             return null;
         }
         Creature closesCreature = null;
-        int distance = Integer.MAX_VALUE;
+        double distance = Integer.MAX_VALUE;
         for (Creature creature : this.creatureList) {
             if (creature.getPositionZ() != from.getPositionZ()) {
                 continue;
             }
-            int currentDistance = from.distanceTo(creature);
+            double currentDistance = from.distanceTo(creature);
             if (distance > currentDistance) {
                 distance = currentDistance;
                 closesCreature = creature;
@@ -106,5 +116,9 @@ public class BattleList {
             }
         }
         return null;
+    }
+
+    public List<Creature> getCreatureList() {
+        return new ArrayList<>(this.creatureList);
     }
 }

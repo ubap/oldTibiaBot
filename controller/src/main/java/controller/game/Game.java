@@ -1,5 +1,8 @@
 package controller.game;
 
+import controller.game.world.CreatureFactory;
+import controller.game.world.CreatureFactoryImpl;
+import controller.game.world.Player;
 import remote.*;
 import controller.constants.Constants;
 import controller.game.world.Creature;
@@ -21,15 +24,19 @@ public class Game {
     private Constants constants;
 
     @Getter
-    private RemoteMethodFactory remoteMethodFactory;
+    private CreatureFactory creatureFactory;
+    @Getter
+    private RemoteMethod remoteMethod;
     @Getter
     private RemoteMemoryFactory remoteMemoryFactory;
+
 
 
     public Game(Pipe pipe, Constants constants) {
         this.pipe = pipe;
         this.constants = constants;
-        this.remoteMethodFactory = new RemoteMethodFactoryImpl(this.constants);
+        this.creatureFactory = new CreatureFactoryImpl(this);
+        this.remoteMethod = new RemoteMethodImpl(this);
         this.remoteMemoryFactory = new RemoteMemoryFactoryImpl();
     }
 
@@ -45,13 +52,13 @@ public class Game {
      * blocks thread for few moments if self is not found in the BattleList. This happen on Re-Log
      * @return Creature representing Self or null if timed out.
      */
-    public Creature getSelf() throws IOException {
+    public Player getSelf() throws IOException {
         int retries = 0;
         Creature self;
         while (retries < 200) {
             self = BattleList.allVisible(this).getCreatureById(getSelfId());
             if (self != null) {
-                return self;
+                return this.creatureFactory.getPlayer(self);
             }
             retries++;
             try {
@@ -65,12 +72,12 @@ public class Game {
     }
 
     /**
-     * Returns BattleList with all visible creatures, without self.
+     * Returns BattleList with all visible creatures, without self. Only the same floor as self.
      *
      * @return BattleList
      */
     public BattleList getBattleList() throws IOException {
-        return BattleList.allVisibleWithoutGiven(this, getSelfId());
+        return BattleList.allVisibleWithoutGivenSameFloor(this, getSelf());
     }
 
     public Integer getPlayerHp() throws IOException {
@@ -93,7 +100,7 @@ public class Game {
     // actions
 
     public void say(String text) throws IOException {
-        this.remoteMethodFactory.say(text).execute(this.pipe);
+        this.remoteMethod.say(text);
     }
 
     public void attack(Creature creature) throws IOException {
@@ -103,10 +110,27 @@ public class Game {
         }
         log.info("Attack: {}", creature.toString());
         // execute a packet to game world
-        this.remoteMethodFactory.attack(creature.getId()).execute(this.pipe);
+        this.remoteMethod.attack(creature.getId());
         this.remoteMemoryFactory.writeInt(
                 this.constants.getAddressTargetId(), creature.getId()).execute(this.pipe);
 
+    }
+
+    public int getTargetId() throws IOException {
+        return this.remoteMemoryFactory.readInt(
+                this.constants.getAddressTargetId()).execute(this.pipe).getData().getInt(0);
+    }
+
+    public boolean isTargeting() throws IOException {
+        int targetId = getTargetId();
+        if (targetId == 0) {
+            return false;
+        }
+        Creature creature = getBattleList().getCreatureById(targetId);
+        if (creature == null) {
+            return false;
+        }
+        return true;
     }
 
     public Long getHits() {

@@ -1,5 +1,6 @@
-package controller;
+package manual;
 
+import controller.TestHelper;
 import controller.constants.Consts854;
 import controller.game.Game;
 import org.slf4j.Logger;
@@ -15,26 +16,11 @@ public class Benchmark {
 
     private static final Logger log = LoggerFactory.getLogger(Benchmark.class);
 
-    public static void main(String[] argv) {
+    public static void main(String[] argv) throws Exception {
 
-        try {
+        Game game = TestHelper.getGame();
 
-            List<Integer> processList = ProcessListUtil.getProcessList("Tibia.exe");
-            Pipe pipe;
-            if (processList.size() > 0) {
-                pipe = Pipe.forName("\\\\.\\pipe\\oldTibiaBot" + processList.get(0));
-            } else {
-                return;
-            }
-            Game game = new Game(pipe, new Consts854());
-
-
-
-            executeBenchmarks(game, Arrays.asList(1, 2, 4, 8, 16, 32, 64, 10000));
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        executeBenchmarks(game, Arrays.asList(1, 2, 4, 8, 16, 32, 64, 10000));
     }
 
     private static void executeBenchmarks(Game game, List<Integer> timesList) throws IOException {
